@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8f2f3">
+<meta name="screen-orientation" content="landscape">
+<title>Mahinoor — A Little World</title>
+<style>
+:root{
+  --ivory:#faf7f3;--paper:#fffdfb;--blush:#ead8de;--mauve:#b89aa8;--deep:#67535e;
+  --lav:#d9cfdb;--sage:#dce2d8;--ink:#4d4148;--muted:#887b82;--line:rgba(103,83,94,.14);
+  --shadow:0 24px 70px rgba(74,55,65,.12);--soft:0 12px 35px rgba(74,55,65,.09);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ivory);color:var(--ink);font-family:Georgia,"Times New Roman",serif;overflow-x:hidden}
+button,a{font:inherit;color:inherit}button{cursor:pointer}a{text-decoration:none}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.9),transparent 32%),radial-gradient(circle at 85% 40%,rgba(234,216,222,.28),transparent 30%)}
+.butterfly{position:fixed;right:8vw;top:18vh;z-index:30;font-size:18px;opacity:.48;animation:float 7s ease-in-out infinite;pointer-events:none}.butterfly:after{content:"✦";font-size:7px;position:absolute;right:-8px;top:-4px;color:var(--mauve)}
+@keyframes float{0%,100%{transform:translate3d(0,0,0) rotate(-3deg)}50%{transform:translate3d(-9px,-10px,0) rotate(3deg)}}
+.topbar{position:fixed;top:18px;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:0 clamp(18px,4vw,58px);pointer-events:none}.brand,.back{pointer-events:auto;background:rgba(255,253,251,.62);border:1px solid rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 28px rgba(74,55,65,.07)}.brand{padding:9px 15px;border-radius:999px;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.brand b{font-weight:500}.back{border-radius:999px;padding:9px 14px;font-size:12px;letter-spacing:.08em;transition:.35s ease}.back:hover{transform:translateY(-2px);background:#fff}
+.hero{min-height:86vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:130px 24px 80px;position:relative}.hero-inner{max-width:800px}.eyebrow{font-family:Arial,sans-serif;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}.hero h1{margin:0;font-size:clamp(3.2rem,8vw,7.6rem);font-weight:400;line-height:.9;letter-spacing:.02em;color:var(--deep);text-shadow:0 8px 35px rgba(103,83,94,.08)}.hero h2{margin:24px 0 10px;font-size:clamp(1.5rem,3vw,2.55rem);font-weight:400;color:#75636c}.hero p{margin:0 auto;max-width:540px;font-size:clamp(.95rem,1.4vw,1.12rem);font-style:italic;line-height:1.7;color:var(--muted)}.divider{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--mauve),transparent);margin:30px auto 0}.scroll-note{margin-top:48px;font:10px Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#a2949a;animation:pulse 2.8s ease-in-out infinite}@keyframes pulse{50%{opacity:.45}}
+.nav{position:sticky;top:0;z-index:25;display:flex;justify-content:center;gap:7px;padding:12px 18px;background:rgba(250,247,243,.76);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.7);border-bottom:1px solid var(--line)}.nav button{border:0;background:transparent;padding:9px 13px;border-radius:999px;font:10px Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#85757d;transition:.3s}.nav button:hover,.nav button.active{background:rgba(234,216,222,.48);color:var(--deep)}
+.section{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:100px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:34px}.section-label{font:9px Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;color:#9a8c92}.section-title{margin:7px 0 0;font-size:clamp(2rem,4vw,3.5rem);font-weight:400;color:var(--deep)}.section-copy{max-width:360px;font-size:14px;line-height:1.7;color:var(--muted);font-style:italic}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}.card{position:relative;border:1px solid rgba(255,255,255,.82);background:rgba(255,253,251,.68);box-shadow:var(--soft);border-radius:22px;overflow:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s}.card:hover{transform:translateY(-7px);box-shadow:var(--shadow)}.card button{width:100%;border:0;background:none;padding:0;text-align:left}.visual{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--blush),var(--lav))}.visual img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1)}.card:hover .visual img{transform:scale(1.045)}.meta{padding:17px 19px 20px}.meta small{font:9px Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#a09197}.meta h3{margin:7px 0 5px;font-size:21px;font-weight:400}.meta p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}.arrow{float:right;font:16px Arial,sans-serif;color:var(--mauve)}
+.art{grid-column:span 7}.art .visual{height:410px}.music{grid-column:span 5}.music .visual{height:410px}.memories{grid-column:span 5}.memories .visual{height:370px}.books{grid-column:span 7}.books .visual{height:370px}.letter{grid-column:span 7}.letter .visual{height:400px}.videos{grid-column:span 5}.videos .visual{height:400px}
+.placeholder{height:100%;display:flex;align-items:center;justify-content:center;color:rgba(103,83,94,.5);font:10px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-align:center;padding:20px}.placeholder span{padding:10px 14px;border:1px solid rgba(103,83,94,.16);border-radius:999px;background:rgba(255,255,255,.35)}
+.music-visual{display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.78),transparent 28%),linear-gradient(135deg,#ded4df,#ead8de)}.music-symbol{font-size:78px;color:#846c78;font-weight:400}.wave{display:flex;align-items:center;gap:5px;height:70px}.wave i{display:block;width:2px;background:rgba(103,83,94,.38);border-radius:99px;animation:wave 1.8s ease-in-out infinite}.wave i:nth-child(1){height:18px}.wave i:nth-child(2){height:35px;animation-delay:.1s}.wave i:nth-child(3){height:52px;animation-delay:.2s}.wave i:nth-child(4){height:27px;animation-delay:.3s}.wave i:nth-child(5){height:44px;animation-delay:.4s}.wave i:nth-child(6){height:22px;animation-delay:.5s}.wave i:nth-child(7){height:39px;animation-delay:.6s}.wave i:nth-child(8){height:17px;animation-delay:.7s}@keyframes wave{50%{transform:scaleY(.45)}}
+.memory-stack{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}.memory-stack img{position:absolute;width:55%;height:70%;object-fit:cover;border:8px solid #fffdfb;box-shadow:0 15px 30px rgba(65,48,57,.14);border-radius:3px}.memory-stack img:nth-child(1){transform:rotate(-7deg) translate(-42px,5px)}.memory-stack img:nth-child(2){transform:rotate(4deg) translate(30px,-10px)}.memory-stack img:nth-child(3){transform:rotate(-1deg) translate(0,25px)}
+.book-shelf{height:100%;display:flex;align-items:end;justify-content:center;gap:12px;padding:40px 30px;background:linear-gradient(150deg,#e8ddd9,#d8cfdb)}.book-shelf img{height:72%;max-width:20%;object-fit:cover;box-shadow:0 13px 24px rgba(60,45,52,.18);border-radius:2px;transition:.5s}.card:hover .book-shelf img:nth-child(1){transform:translateY(-7px) rotate(-2deg)}.card:hover .book-shelf img:nth-child(2){transform:translateY(-13px)}.card:hover .book-shelf img:nth-child(3){transform:translateY(-8px) rotate(2deg)}
+.letter-paper{height:100%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 20%,#fff,transparent 45%),linear-gradient(135deg,#fbf2ea,#f0dfe2)}.paper{width:66%;padding:45px 42px;background:#fffdf8;box-shadow:0 18px 45px rgba(73,52,61,.12);transform:rotate(-1.2deg);position:relative}.paper:before{content:"";position:absolute;inset:13px;border:1px solid rgba(167,127,145,.2);pointer-events:none}.paper-kicker{font:9px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#a18e97}.paper h3{font-size:28px;font-weight:400;margin:13px 0}.paper p{font-size:14px;line-height:1.8;font-style:italic;color:#796b72}.paper .heart{text-align:right;color:#b99aa8;font-size:24px}
+.video-visual{background:linear-gradient(135deg,#d9d0d8,#e8d8db);display:flex;align-items:center;justify-content:center}.play{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:rgba(255,253,251,.72);border:1px solid rgba(255,255,255,.9);box-shadow:0 12px 30px rgba(75,55,65,.12);font:18px Arial;color:var(--deep);padding-left:4px}.video-visual img{position:absolute;inset:0;opacity:.55}.play-wrap{position:relative;z-index:2}
+#artGrid,#musicGrid,#memoryGrid,#bookGrid,#videoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.subitem{border-radius:18px;overflow:hidden;background:#fffdfb;border:1px solid var(--line);box-shadow:var(--soft);cursor:pointer;transition:.35s}.subitem:hover{transform:translateY(-5px);box-shadow:var(--shadow)}.subitem img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:linear-gradient(135deg,var(--blush),var(--lav))}.submeta{padding:13px 15px}.submeta b{font-weight:400;font-size:16px}.submeta span{display:block;margin-top:4px;font:9px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#9b8d93}
+.detail-section{padding-top:35px}.audio-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.audio-card{display:flex;align-items:center;gap:15px;padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.58)}.audio-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--blush);color:var(--deep)}.audio-card strong{font-weight:400;font-size:16px}.audio-card small{display:block;margin-top:3px;color:var(--muted);font:10px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}.audio-card audio{margin-left:auto;width:min(240px,42%)}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:30px;background:rgba(64,48,56,.42);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.modal.open{display:flex}.modal-box{position:relative;width:min(1040px,94vw);max-height:90vh;overflow:auto;background:var(--paper);border:1px solid rgba(255,255,255,.9);border-radius:24px;box-shadow:0 35px 100px rgba(45,32,39,.28);padding:20px}.modal-close{position:absolute;right:16px;top:14px;border:0;width:38px;height:38px;border-radius:50%;background:rgba(234,216,222,.72);font:20px Arial;color:var(--deep);z-index:3}.modal-media{display:grid;place-items:center;min-height:55vh;background:#f2e8ea;border-radius:17px;overflow:hidden}.modal-media img,.modal-media video{max-width:100%;max-height:72vh;display:block}.modal-title{padding:17px 4px 4px}.modal-title small{font:9px Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#9b8d93}.modal-title h3{font-size:27px;font-weight:400;margin:6px 0}.modal-title p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+.footer{text-align:center;padding:90px 20px 120px;color:var(--muted)}.footer .mark{font-size:20px;color:var(--mauve)}.footer h2{font-size:30px;font-weight:400;color:var(--deep);margin:12px 0}.footer p{font-style:italic;font-size:13px}
+@media(max-width:800px){.topbar{padding:0 14px}.brand{font-size:10px}.back{font-size:10px}.hero{min-height:78vh;padding-top:120px}.section{width:min(100% - 28px,600px);padding:72px 0}.section-head{display:block}.section-copy{margin-top:14px}.grid{display:grid;grid-template-columns:1fr}.art,.music,.memories,.books,.letter,.videos{grid-column:1}.art .visual,.music .visual,.memories .visual,.books .visual,.letter .visual,.videos .visual{height:min(72vw,360px)}#artGrid,#musicGrid,#memoryGrid,#bookGrid,#videoGrid{grid-template-columns:1fr 1fr}.audio-list{grid-template-columns:1fr}.audio-card{flex-wrap:wrap}.audio-card audio{width:100%;margin:2px 0 0}.nav{overflow-x:auto;justify-content:flex-start}.nav button{white-space:nowrap}.paper{width:78%;padding:35px 28px}}
+@media(max-width:480px){.hero h1{font-size:clamp(3rem,18vw,4.5rem)}#artGrid,#musicGrid,#memoryGrid,#bookGrid,#videoGrid{grid-template-columns:1fr}.paper{width:88%;padding:30px 24px}.paper h3{font-size:23px}.butterfly{right:5vw;top:13vh}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* ===== COLLECTION HERO — FULL BACKGROUND ART ===== */
+.hero{
+  min-height:100svh;
+  height:100svh;
+  padding:clamp(92px,10vh,120px) clamp(22px,5vw,72px) clamp(55px,8vh,90px);
+  overflow:hidden;
+  isolation:isolate;
+  align-items:center;
+  justify-content:flex-end;
+  text-align:center;
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,253,251,.02) 42%,
+      rgba(255,250,247,.16) 56%,
+      rgba(255,250,247,.56) 72%,
+      rgba(255,250,247,.74) 100%),
+    linear-gradient(0deg,rgba(91,73,81,.16),transparent 30%),
+    url('./assets/photos/collection-hero.png') center center / cover no-repeat;
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 78% 48%,rgba(255,255,255,.36),transparent 42%);
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 24%,transparent 76%,rgba(72,54,63,.08));
+}
+.hero-inner{
+  width:min(42vw,590px);
+  max-width:590px;
+  margin-right:clamp(4px,2.5vw,42px);
+  padding:clamp(24px,3.2vw,48px) clamp(20px,3vw,44px);
+  border:1px solid rgba(255,255,255,.44);
+  border-radius:32px;
+  background:rgba(255,253,251,.15);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  box-shadow:0 24px 70px rgba(79,59,68,.08);
+  text-shadow:0 2px 18px rgba(255,255,255,.72);
+}
+.hero .eyebrow{color:rgba(103,83,94,.72)}
+.hero h1{font-size:clamp(3.2rem,7.4vw,7rem);color:#5b4a54}
+.hero h2{color:#75636c}
+.hero p{color:#776a71}
+.hero .divider{background:linear-gradient(90deg,transparent,rgba(167,127,145,.82),transparent)}
+.hero .scroll-note{color:#85757d}
+
+/* Portrait devices: keep the artwork cinematic rather than letting the composition break. */
+.portrait-lock{display:none}
+@media(max-width:800px) and (orientation:portrait){
+  body{overflow:hidden}
+  .hero,.nav,main,.footer,.topbar,.butterfly{visibility:hidden}
+  .portrait-lock{
+    position:fixed;inset:0;z-index:999;display:grid;place-items:center;
+    padding:28px;text-align:center;
+    background:
+      linear-gradient(rgba(255,253,251,.82),rgba(248,242,243,.94)),
+      url('./assets/photos/collection-hero.png') center / cover no-repeat;
+  }
+  .portrait-lock-card{
+    width:min(88vw,360px);padding:34px 24px;border-radius:28px;
+    background:rgba(255,253,251,.68);
+    border:1px solid rgba(255,255,255,.88);
+    box-shadow:0 25px 80px rgba(74,55,65,.14);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .portrait-lock-icon{font-size:38px;margin-bottom:14px;animation:rotateHint 2.2s ease-in-out infinite}
+  .portrait-lock h2{margin:0 0 9px;font-size:27px;font-weight:400;color:var(--deep)}
+  .portrait-lock p{margin:0;color:var(--muted);font-size:13px;line-height:1.7;font-style:italic}
+}
+@keyframes rotateHint{0%,100%{transform:rotate(0deg)}50%{transform:rotate(90deg)}}
+
+@media(max-width:1100px) and (orientation:landscape){
+  .hero{padding-right:3vw;
+    background:
+      linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,253,251,.03) 45%,rgba(255,250,247,.42) 67%,rgba(255,250,247,.70) 100%),
+      url('./assets/photos/collection-hero.png') center center / cover no-repeat;
+  }
+  .hero-inner{width:min(43vw,470px);margin-right:0;padding:22px 24px;border-radius:26px}
+  .hero h1{font-size:clamp(2.7rem,8vw,5rem)}
+  .hero h2{margin:15px 0 8px;font-size:clamp(1.25rem,3vw,2rem)}
+  .hero p{font-size:clamp(.78rem,1.4vw,1rem)}
+  .divider{margin-top:20px}.scroll-note{margin-top:28px}
+}
+@media(max-width:600px) and (orientation:landscape){
+  .hero{padding:64px 3vw 35px;background-position:45% center}
+  .hero-inner{width:46vw;max-width:390px;padding:16px 18px;border-radius:21px;background:rgba(255,253,251,.18)}
+  .hero .eyebrow{font-size:8px;letter-spacing:.23em;margin-bottom:9px}
+  .hero h1{font-size:clamp(2.1rem,8.5vw,3.6rem)}
+  .hero h2{margin:9px 0 5px;font-size:clamp(1rem,3.4vw,1.45rem)}
+  .hero p{font-size:clamp(.65rem,1.8vw,.82rem);line-height:1.45}
+  .hero .divider{width:72px;margin-top:11px}
+  .hero .scroll-note{margin-top:16px;font-size:7px;letter-spacing:.18em}
+}
+
+
+/* =========================================================
+   MOVING MEMORIES — CONFIGURABLE FLOATING AUDIO PLAYER
+   Adjust these variables to resize or reposition the frosted block.
+========================================================= */
+.moving-memories-section { position:relative; isolation:isolate; width:100%; max-width:none; padding-left:max(20px,4vw); padding-right:max(20px,4vw); overflow:hidden; --memory-player-width:min(520px,92vw); --memory-player-top:clamp(52px,9vh,115px); --memory-player-x:700px; --memory-player-y:280px; --memory-player-radius:clamp(24px,3vw,36px); --memory-player-padding:clamp(18px,2.4vw,30px); }
+.moving-memories-section::before { content:""; position:absolute; inset:0; z-index:-2; background:linear-gradient(90deg,rgba(48,36,45,.42),rgba(48,36,45,.18)),url('./assets/photos/moving-memories-bg.jpg') center/cover no-repeat,linear-gradient(135deg,#d9cbd3,#eee1e3 55%,#cfc5d8); transform:scale(1.02); }
+.moving-memories-section::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(250,247,243,.10),rgba(67,49,60,.18)); pointer-events:none; }
+.moving-memories-section .section-head { position:relative; z-index:1; }
+.moving-memories-section .section-label,.moving-memories-section .section-title,.moving-memories-section .section-copy { color:#fffaf7; text-shadow:0 2px 18px rgba(55,39,48,.18); }
+.moving-memories-stage { display:flex; justify-content:center; align-items:flex-start; min-height:clamp(430px,58vh,650px); padding:0 0 clamp(30px,5vw,72px); }
+.moving-memories-player { width:var(--memory-player-width); margin-top:var(--memory-player-top); transform:translate3d(var(--memory-player-x),var(--memory-player-y),0); padding:var(--memory-player-padding); border:1px solid rgba(255,255,255,.58); border-radius:var(--memory-player-radius); background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,247,249,.12)); box-shadow:0 30px 90px rgba(39,27,36,.28),inset 0 1px 0 rgba(255,255,255,.48); backdrop-filter:blur(25px) saturate(125%); -webkit-backdrop-filter:blur(25px) saturate(125%); animation:movingMemoriesFloat 8s ease-in-out infinite; will-change:transform; }
+.moving-memories-player-info { min-width:0; text-align:center; color:#fffaf7; }
+.moving-memories-kicker { font:9px Arial,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,250,247,.68); }
+.moving-memories-player-info h3 { margin:12px 0 8px; font:400 clamp(1.75rem,4vw,2.7rem)/1.08 Georgia,'Times New Roman',serif; letter-spacing:-.025em; }
+.moving-memories-player-info p { max-width:340px; margin:0 auto 22px; font-size:clamp(.86rem,1.2vw,1rem); line-height:1.65; font-style:italic; color:rgba(255,250,247,.76); }
+.moving-memories-audio { display:block; width:100%; height:42px; margin:0 auto; border-radius:999px; accent-color:#b99aaa; filter:drop-shadow(0 8px 18px rgba(35,25,32,.12)); }
+.moving-memories-audio-note { margin-top:13px; font:9px Arial,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,250,247,.58); }
+@keyframes movingMemoriesFloat { 0%,100% { transform:translate3d(var(--memory-player-x),var(--memory-player-y),0); } 50% { transform:translate3d(var(--memory-player-x),calc(var(--memory-player-y) - 8px),0); } }
+@media (max-width:760px) { .moving-memories-section { padding-left:16px; padding-right:16px; --memory-player-width:min(440px,94vw); --memory-player-top:clamp(28px,6vh,60px); --memory-player-padding:18px; } .moving-memories-stage { min-height:0; padding-bottom:34px; } .moving-memories-player { width:var(--memory-player-width); } }
+@media (prefers-reduced-motion:reduce) { .moving-memories-player { animation:none; } }
+</style>
+</head>
+<body>
+<div class="portrait-lock" aria-label="Landscape viewing notice">
+  <div class="portrait-lock-card">
+    <div class="portrait-lock-icon" aria-hidden="true">↻</div>
+    <h2>Turn your phone sideways</h2>
+    <p>This little collection is designed for a wide, cinematic view.</p>
+  </div>
+</div>
+
+<div class="butterfly">🦋</div>
+<header class="topbar"><a class="brand" href="world.html">✦ <b>Mahinoor</b></a><a class="back" href="world.html">← Back to the little world</a></header>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="eyebrow">12 September 2026</div>
+    <h1>Mahinoor</h1>
+    <h2>A Little World</h2>
+    <p>Little pieces of your world, gathered with care.</p>
+    <div class="divider"></div>
+    <div class="scroll-note">"Aafaton mein..Rahaton sa...Ye Mahinoor sa Jahaan Mera"</div>
+  </div>
+</section>
+
+<nav class="nav" aria-label="Collection sections">
+  <button class="active" data-target="collection">All</button><button data-target="art">Art</button><button data-target="music">Music</button><button data-target="memories">Memories</button><button data-target="books">Books</button><button data-target="letter">A Letter</button><button data-target="videos">Videos</button>
+</nav>
+
+<main id="collection">
+<section class="section" id="art">
+  <div class="section-head"><div><div class="section-label">01 · Art</div><h2 class="section-title">Little things she created.</h2></div><p class="section-copy">A quiet corner for drawings, sketches and little pieces of imagination.</p></div>
+  <div id="artGrid"></div>
+</section>
+
+<section class="section" id="music">
+  <div class="section-head"><div><div class="section-label">02 · Music</div><h2 class="section-title">A little melody from her world.</h2></div><p class="section-copy">" Inn yaadon ki, baarishon mein; hai gum kaha... kahan ye dil mera? "</p></div>
+  <div class="audio-list" id="audioList"></div>
+</section>
+
+<section class="section" id="memories">
+  <div class="section-head"><div><div class="section-label">03 · Memories</div><h2 class="section-title">Moments worth keeping.</h2></div><p class="section-copy">Photographs gathered like small pressed flowers between the pages of a favourite book.</p></div>
+  <div id="memoryGrid"></div>
+</section>
+
+<section class="section" id="books">
+  <div class="section-head"><div><div class="section-label">04 · Books</div><h2 class="section-title">Stories she keeps close.</h2></div><p class="section-copy">The stories, worlds and characters that have found a place in her little world.</p></div>
+  <div id="bookGrid"></div>
+</section>
+
+<section class="section" id="letter">
+  <div class="section-head"><div><div class="section-label">05 · A Letter</div><h2 class="section-title">Something I wanted to say.</h2></div></div>
+  <article class="card letter"><div class="visual letter-paper"><div class="paper"><div class="paper-kicker">Sarha-e-Kaifiyat</div><h3>Dear Mahi,</h3><p>Some people make ordinary moments feel a little more magical simply by being themselves. This little collection is a small place for the things that make your world yours.</p><p>" Ji, Karlein expect mujhse thoda kuch? " </p><div class="heart">♡</div></div></div></article>
+</section>
+
+<section class="section moving-memories-section" id="videos">
+  <div class="section-head">
+    <div>
+      <div class="section-label">06 · Moving Memories</div>
+      <h2 class="section-title">Little moments in motion.</h2>
+    </div>
+    <p class="section-copy"> " Tere bin... na kate mera jo din, 
+Lo chalo kehta hu main,
+Haal e dil tumse, hmmm..........
+Main rahun— tera yun, 
+Kyun chalun— tumse door, 
+Main toh tha tera hi hoon"          —— Samar Jafri. </p>
+  </div>
+
+  <div class="moving-memories-stage">
+    <div class="moving-memories-player" id="movingMemoriesPlayer">
+      <div class="moving-memories-player-info">
+        <div class="moving-memories-kicker">A little memory in sound</div>
+        <h3>Main Rahun</h3>
+        <p> " Kya kahoon tumse apni baat main....
+Aankhein meri kehti hain
+Ankaha tumse "</p>
+        <audio id="movingMemoriesAudio" class="moving-memories-audio" controls preload="metadata">
+          <source src="./assets/audio/song-04.mp3" type="audio/mpeg">
+          Your browser does not support the audio player.
+        </audio>
+        <div class="moving-memories-audio-note"> " Khwaab mein tum mere jo aao, 
+Ho jaye duniya se hum door? "</div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><div class="mark">✦</div><h2>A little world, just for you.</h2><p>"Ill be waiting for you on the Other-Side"</p></footer>
+
+<div class="modal" id="modal" aria-hidden="true"><div class="modal-box"><button class="modal-close" id="modalClose" aria-label="Close">×</button><div class="modal-media" id="modalMedia"></div><div class="modal-title"><small id="modalEyebrow"></small><h3 id="modalTitle"></h3><p id="modalDescription"></p></div></div></div>
+
+<script>
+/* ============================================================
+   ASSET MANIFEST
+   Rename your real files to these exact names and place them in:
+
+   assets/
+     artwork/art-01.jpg ... art-06.jpg
+     photos/memory-01.jpg ... memory-12.jpg
+     books/peer-e-kamil.jpg
+           aab-e-hayat.jpg
+           jannat-ke-pattay.jpg
+           amar-bail.jpg
+           ishq-e-atish.jpg
+     audio/song-01.mp3 ... song-03.mp3
+     videos/video-01.mp4 ... video-04.mp4
+
+   You can add/remove entries below without changing the page design.
+   ============================================================ */
+const ASSETS={
+  artwork:[
+    {file:'art-01.jpg',title:'A little sketch',desc:'A piece from her sketchbook.'},
+    {file:'art-02.jpg',title:'Another little creation',desc:'A quiet moment captured on paper.'},
+    {file:'art-03.jpg',title:'Artistic dreams',desc:'A page from her creative world.'},
+    {file:'art-04.jpg',title:'Something she made',desc:'Another little piece worth keeping.'},
+    {file:'art-05.jpg',title:'Lines & little dreams',desc:'A small glimpse into her imagination.'},
+    {file:'art-06.jpg',title:'One more little thing',desc:'A final piece from the collection.'}
+  ],
+  memories:[
+    {file:'memory-01.jpg',title:'Her Magic — Turning Letters into Art',desc:'A little moment worth remembering.'},
+    {file:'memory-02.jpg',title:'Songs Between Strings',desc:'A moment kept close.'},
+    {file:'memory-03.jpg',title:'Treasures in the Little Things',desc:'One of those ordinary moments that became special.'},
+    {file:'memory-04.jpg',title:'Where Her Heart Blooms',desc:'A little piece of time.'},
+    {file:'memory-05.jpg',title:'The Dreams She Wears',desc:'A favourite little memory.'},
+    {file:'memory-06.jpg',title:'A Canvas Called Her World',desc:'Something worth keeping.'},
+    {file:'memory-07.jpg',title:'Hands & Paws',desc:'A quiet snapshot.'},
+    {file:'memory-08.jpg',title:'The Rescued Bird',desc:'A moment from her world.'},
+    {file:'memory-09.jpg',title:'Her Collection of Furry Friends',desc:'A little memory.'},
+    {file:'memory-10.jpg',title:'Time, Caught Gently',desc:'Another page in the story.'},
+    {file:'memory-11.jpg',title:'Moments of Play',desc:'A moment that stayed.'},
+    {file:'memory-12.jpg',title:'The Letter',desc:'A final little memory.'}
+  ],
+  books:[
+    {file:'peer-e-kamil.jpg',title:'Peer-e-Kamil',desc:'One of the stories kept close.'},
+    {file:'aab-e-hayat.jpg',title:'Aab-e-Hayat',desc:'A world worth returning to.'},
+    {file:'jannat-ke-pattay.jpg',title:'Jannat Ke Pattay',desc:'A beloved story.'},
+    {file:'amar-bail.jpg',title:'Amar Bail',desc:'A story that leaves a mark.'},
+    {file:'ishq-e-atish.jpg',title:'Ishq-e-Atish',desc:'Another story from her shelf.'}
+  ],
+  videos:[
+    {file:'video-01.mp4',title:'Moving Memory I',desc:'A little moment in motion.'},
+    {file:'video-02.mp4',title:'Moving Memory II',desc:'A memory that moves.'},
+    {file:'video-03.mp4',title:'Moving Memory III',desc:'A tiny piece of time.'},
+    {file:'video-04.mp4',title:'Moving Memory IV',desc:'One more moment to keep.'}
+  ],
+  audio:[
+    {file:'song-01.mp3',title:'Par Ab Jo Ayegi Tu | by: Aur',desc:'By: AUR'},
+    {file:'song-02.mp3',title:'Mahinoor | by: Kifayatt',desc:'By: Kifayatt'},
+    {file:'song-03.mp3',title:'Alag Asmaan | by: Anuv Jain',desc:'By: Anuv Jain'}
+  ]
+};
+const root='./assets/';
+const imgPath=(folder,file)=>root+folder+'/'+file;
+const modal=document.getElementById('modal'),media=document.getElementById('modalMedia'),mTitle=document.getElementById('modalTitle'),mDesc=document.getElementById('modalDescription'),mEye=document.getElementById('modalEyebrow');
+function openModal(type,item){
+  modal.classList.add('open');modal.setAttribute('aria-hidden','false');media.innerHTML='';
+  mEye.textContent=type.toUpperCase();mTitle.textContent=item.title;mDesc.textContent=item.desc;
+  if(type==='VIDEO'){const v=document.createElement('video');v.src=root+'videos/'+item.file;v.controls=true;v.autoplay=true;v.playsInline=true;media.appendChild(v)}
+  else {const i=document.createElement('img');i.src=imgPath(type==='ART'?'artwork':type==='BOOK'?'books':'photos',item.file);i.alt=item.title;i.onerror=()=>{i.replaceWith(placeholder(item.file))};media.appendChild(i)}
+}
+function placeholder(file){const d=document.createElement('div');d.className='placeholder';d.innerHTML='<span>Rename your asset to<br><b>'+file+'</b></span>';return d}
+function buildImageGrid(id,type,data){const grid=document.getElementById(id);data.forEach(item=>{const c=document.createElement('article');c.className='subitem';const img=document.createElement('img');img.src=imgPath(type==='ART'?'artwork':type==='BOOK'?'books':'photos',item.file);img.alt=item.title;img.onerror=()=>{img.replaceWith(placeholder(item.file))};c.append(img);const meta=document.createElement('div');meta.className='submeta';meta.innerHTML='<b>'+item.title+'</b><span>'+item.file+'</span>';c.append(meta);c.onclick=()=>openModal(type,item);grid.append(c)})}
+function buildFinalAudio(){
+  const audio=document.getElementById('movingMemoriesAudio');
+  if(audio){ audio.volume=0.78; }
+}
+function buildAudio(){const list=document.getElementById('audioList');ASSETS.audio.forEach(item=>{const c=document.createElement('div');c.className='audio-card';c.innerHTML='<div class="audio-icon">♪</div><div><strong>'+item.title+'</strong><small>'+item.file+'</small></div>';const a=document.createElement('audio');a.controls=true;a.preload='none';a.src=root+'audio/'+item.file;c.append(a);list.append(c)})}
+buildImageGrid('artGrid','ART',ASSETS.artwork);buildImageGrid('memoryGrid','MEMORY',ASSETS.memories);buildImageGrid('bookGrid','BOOK',ASSETS.books);buildFinalAudio();buildAudio();
+
+document.getElementById('modalClose').onclick=()=>closeModal();modal.onclick=e=>{if(e.target===modal)closeModal()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');media.innerHTML=''}
+
+document.querySelectorAll('.nav button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const target=btn.dataset.target;if(target==='collection')window.scrollTo({top:0,behavior:'smooth'});else document.getElementById(target).scrollIntoView({behavior:'smooth',block:'start'})}));
+const sections=['art','music','memories','books','letter','videos'];const navButtons=[...document.querySelectorAll('.nav button')];const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){const idx=sections.indexOf(entry.target.id);if(idx>=0){navButtons.forEach(b=>b.classList.remove('active'));navButtons[idx+1].classList.add('active')}}})},{rootMargin:'-25% 0px -60% 0px'});sections.forEach(id=>observer.observe(document.getElementById(id)));
+</script>
+</body>
+</html>

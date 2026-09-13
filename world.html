@@ -1,0 +1,5174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mahinoor</title>
+
+    <style>
+        /* =========================================
+   MOBILE PORTRAIT NOTICE
+========================================= */
+
+.portrait-notice {
+    display: none;
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+
+    .portrait-notice {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background:
+            radial-gradient(
+                circle at 50% 35%,
+                rgba(255, 235, 240, 0.95) 0%,
+                rgba(218, 193, 210, 0.98) 45%,
+                rgba(155, 126, 151, 1) 100%
+            );
+
+        color: #3f3040;
+        text-align: center;
+
+        padding: 30px;
+    }
+
+    .portrait-content {
+        max-width: 320px;
+        animation: portraitFloat 3s ease-in-out infinite;
+    }
+
+    .portrait-butterfly {
+        font-size: 48px;
+        margin-bottom: 22px;
+        animation: butterflyFloat 2.5s ease-in-out infinite;
+    }
+
+    .portrait-content h2 {
+        margin: 0 0 12px;
+
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 28px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+
+    .portrait-content p {
+        margin: 0;
+
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 16px;
+        line-height: 1.7;
+
+        opacity: 0.8;
+    }
+
+    .rotate-icon {
+        margin: 28px auto 0;
+
+        width: 54px;
+        height: 54px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid rgba(63, 48, 64, 0.35);
+        border-radius: 50%;
+
+        font-size: 27px;
+
+        animation: rotatePhone 2.5s ease-in-out infinite;
+    }
+}
+
+@keyframes portraitFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes butterflyFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(-3deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(3deg);
+    }
+}
+
+@keyframes rotatePhone {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+
+    40% {
+        transform: rotate(90deg);
+    }
+
+    70% {
+        transform: rotate(90deg);
+    }
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --mauve: #d4a5b8;
+            --blush: #f4e7e7;
+            --ivory: #fffef8;
+            --lavender: #e6d5e3;
+            --sage: #c5d5c9;
+            --text: #5a5a5a;
+            --light-text: #8b8b8b;
+        }
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background: var(--ivory);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* =========================================
+           LOADING SCREEN
+        ========================================= */
+
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(255,255,255,0.7),
+                    transparent 55%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--blush),
+                    var(--lavender)
+                );
+
+            transition:
+                opacity 1.2s ease,
+                visibility 1.2s ease;
+        }
+
+        #loadingScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 1.35rem;
+            letter-spacing: 0.16em;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .loading-progress {
+            width: min(280px, 65vw);
+            height: 3px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(90,90,90,0.12);
+        }
+
+        #loadingBar {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(
+                90deg,
+                var(--mauve),
+                var(--lavender)
+            );
+            transition: width 0.25s ease;
+        }
+
+        #loadingPercent {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            color: var(--light-text);
+        }
+
+/* =========================================
+   STORY
+========================================= */
+
+.cinematic-scroll {
+    position: relative;
+    height: 650vh;
+}
+
+.sticky-stage {
+    position: sticky;
+    top: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--blush) 0%,
+            var(--ivory) 100%
+        );
+}
+
+#cinematicCanvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center center;
+}
+
+
+/* =========================================
+   OPENING WHITE FROSTED FADE
+========================================= */
+
+.opening-white-fade {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 34%;
+
+    z-index: 5;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.48) 0%,
+            rgba(255, 255, 255, 0.34) 18%,
+            rgba(255, 255, 255, 0.20) 42%,
+            rgba(255, 255, 255, 0.07) 68%,
+            rgba(255, 255, 255, 0) 100%
+        );
+
+    opacity: 1;
+    will-change: opacity;
+}
+
+
+
+/* =========================================
+   PREMIUM CINEMATIC TEXT
+========================================= */
+
+.cinematic-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    width: min(900px, 88vw);
+
+    transform:
+        translate(-50%, -50%)
+        translateY(28px)
+        scale(0.985);
+
+    z-index: 50;
+
+    text-align: center;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    filter: blur(8px);
+
+    transition:
+        opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cinematic-text.visible {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        translateY(0)
+        scale(1);
+
+    filter: blur(0);
+}
+
+.cinematic-text p {
+    margin: 0;
+
+    padding: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(1.6rem, 4vw, 3.2rem);
+
+    font-weight: 400;
+
+    line-height: 1.25;
+
+    letter-spacing: 0.025em;
+
+    color: #4f414b;
+
+    text-shadow:
+        0 2px 30px rgba(255, 255, 255, 0.85),
+        0 8px 50px rgba(90, 70, 85, 0.08);
+}
+
+        /* =========================================
+           BIRTHDAY ENDING
+        ========================================= */
+
+        #birthdayEnding {
+            position: fixed;
+
+            left: 0;
+            bottom: 0;
+
+            width: 100%;
+
+            padding:
+                5rem
+                1.5rem
+                3.5rem;
+
+            text-align: center;
+
+            z-index: 60;
+
+            opacity: 0;
+
+            transform: translateY(35px);
+
+            pointer-events: none;
+
+            transition:
+                opacity 1.5s ease,
+                transform 1.5s ease;
+
+            background:
+                linear-gradient(
+                    transparent,
+                    rgba(255,254,248,0.96)
+                );
+        }
+
+        #birthdayEnding.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .birthday-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+
+            font-weight: 300;
+
+            letter-spacing: 0.18em;
+
+            margin-bottom: 0.8rem;
+        }
+
+        .birthday-message {
+            max-width: 650px;
+
+            margin: 0 auto 1rem;
+
+            font-size: 1rem;
+
+            line-height: 1.7;
+
+            font-style: italic;
+
+            color: var(--light-text);
+        }
+
+        .birthday-name {
+            font-size: 1.5rem;
+
+            color: var(--mauve);
+
+            letter-spacing: 0.1em;
+
+            margin-bottom: 1.5rem;
+        }
+
+        .collection-trigger {
+            border: 1px solid var(--mauve);
+
+            background:
+                rgba(212,165,184,0.18);
+
+            color: var(--text);
+
+            padding:
+                0.85rem
+                2rem;
+
+            border-radius: 999px;
+
+            font-family: inherit;
+
+            font-size: 0.9rem;
+
+            letter-spacing: 0.08em;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .collection-trigger:hover {
+            transform: translateY(-2px);
+
+            background:
+                rgba(212,165,184,0.35);
+
+            box-shadow:
+                0 10px 30px rgba(212,165,184,0.2);
+        }
+
+/* =========================================================
+   A LITTLE WORLD — PREMIUM EDITORIAL COLLECTION
+========================================================= */
+
+.little-world {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 252, 249, 0.97) 0%,
+            rgba(252, 242, 245, 0.96) 48%,
+            rgba(238, 225, 233, 0.96) 100%
+        );
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+}
+
+.little-world.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+
+/* ---------------------------------------------------------
+   ATMOSPHERIC BACKGROUND
+--------------------------------------------------------- */
+
+.little-world-backdrop {
+    position: fixed;
+    inset: -10%;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 12% 18%,
+            rgba(235, 190, 205, 0.28),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 88% 22%,
+            rgba(218, 197, 225, 0.24),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(247, 218, 214, 0.30),
+            transparent 35%
+        );
+
+    filter: blur(20px);
+
+    animation: littleWorldAtmosphere 12s ease-in-out infinite alternate;
+}
+
+@keyframes littleWorldAtmosphere {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.06);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MAIN CONTENT
+--------------------------------------------------------- */
+
+.little-world-content {
+    position: relative;
+    z-index: 2;
+
+    width: min(1180px, calc(100% - 48px));
+
+    margin: 0 auto;
+
+    padding:
+        70px
+        0
+        60px;
+}
+
+
+/* ---------------------------------------------------------
+   CLOSE BUTTON
+--------------------------------------------------------- */
+
+.little-world-close {
+    position: fixed;
+
+    top: 28px;
+    right: 30px;
+
+    z-index: 20;
+
+    width: 48px;
+    height: 48px;
+
+    padding: 0;
+
+    border: 1px solid rgba(85, 63, 76, 0.18);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.42);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.35s ease,
+        background 0.35s ease,
+        border-color 0.35s ease;
+}
+
+.little-world-close span {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 17px;
+    height: 1px;
+
+    background: #4a3945;
+
+    transform-origin: center;
+}
+
+.little-world-close span:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.little-world-close span:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.little-world-close:hover {
+    transform: rotate(90deg) scale(1.06);
+
+    background: rgba(255, 255, 255, 0.75);
+
+    border-color: rgba(85, 63, 76, 0.3);
+}
+
+
+/* ---------------------------------------------------------
+   HEADER
+--------------------------------------------------------- */
+
+.little-world-header {
+    text-align: center;
+
+    max-width: 650px;
+
+    margin:
+        0 auto
+        38px;
+}
+
+.little-world-eyebrow {
+    margin-bottom: 15px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    letter-spacing: 0.28em;
+
+    color: #876d7d;
+
+    opacity: 0;
+
+    transform: translateY(14px);
+
+    transition:
+        opacity 0.7s ease 0.15s,
+        transform 0.7s ease 0.15s;
+}
+
+.little-world-title {
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(48px, 6vw, 76px);
+
+    font-weight: 400;
+
+    line-height: 0.95;
+
+    letter-spacing: -0.035em;
+
+    color: #493944;
+
+    opacity: 0;
+
+    transform: translateY(20px);
+
+    transition:
+        opacity 0.9s ease 0.25s,
+        transform 0.9s ease 0.25s;
+}
+
+.little-world-subtitle {
+    max-width: 430px;
+
+    margin:
+        20px auto
+        0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 16px;
+
+    line-height: 1.75;
+
+    color: #75616e;
+
+    opacity: 0;
+
+    transform: translateY(15px);
+
+    transition:
+        opacity 0.8s ease 0.4s,
+        transform 0.8s ease 0.4s;
+}
+
+.little-world-divider {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    width: 150px;
+
+    margin:
+        25px auto
+        0;
+
+    opacity: 0;
+
+    transition: opacity 0.8s ease 0.55s;
+}
+
+.little-world-divider span {
+    width: 42px;
+    height: 1px;
+
+    background: rgba(117, 91, 106, 0.22);
+}
+
+.little-world-divider b {
+    font-size: 13px;
+
+    font-weight: 400;
+
+    color: #a77f91;
+}
+
+
+/* ---------------------------------------------------------
+   HEADER OPEN ANIMATION
+--------------------------------------------------------- */
+
+.little-world.is-open
+.little-world-eyebrow,
+.little-world.is-open
+.little-world-title,
+.little-world.is-open
+.little-world-subtitle {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+.little-world.is-open
+.little-world-divider {
+    opacity: 1;
+}
+
+
+/* ---------------------------------------------------------
+   FLOATING CATEGORY NAV
+--------------------------------------------------------- */
+
+.little-world-nav {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin:
+        0 auto
+        45px;
+
+    padding:
+        7px;
+
+    width: fit-content;
+
+    border: 1px solid rgba(100, 75, 89, 0.10);
+    border-radius: 100px;
+
+    background: rgba(255, 255, 255, 0.40);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 12px 35px rgba(83, 59, 74, 0.05);
+}
+
+.little-world-nav-item {
+    border: 0;
+
+    padding:
+        9px
+        17px;
+
+    border-radius: 100px;
+
+    background: transparent;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 11px;
+
+    letter-spacing: 0.06em;
+
+    color: #806b77;
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.little-world-nav-item:hover {
+    transform: translateY(-1px);
+
+    color: #493944;
+}
+
+.little-world-nav-item.active {
+    color: #493944;
+
+    background:
+        rgba(255, 255, 255, 0.85);
+
+    box-shadow:
+        0 4px 15px rgba(85, 63, 76, 0.07);
+}
+
+/* =========================================================
+   NAVIGATION WORD MEANING POPUP
+========================================================= */
+
+.word-meaning-popup {
+    position: fixed;
+
+    z-index: 9001;
+
+    width: min(300px, calc(100vw - 32px));
+
+    padding: 18px 20px 19px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.42);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 252, 253, 0.30),
+            rgba(248, 232, 240, 0.20)
+        );
+
+    backdrop-filter:
+        blur(20px)
+        saturate(125%);
+
+    -webkit-backdrop-filter:
+        blur(20px)
+        saturate(125%);
+
+    box-shadow:
+        0 14px 40px
+        rgba(30, 20, 28, 0.16),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.40);
+
+    color:
+        rgba(255, 255, 255, 0.96);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform:
+        translateY(-7px)
+        scale(0.97);
+
+    transform-origin:
+        top center;
+
+    transition:
+        opacity 0.28s ease,
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.28s ease;
+}
+
+
+.word-meaning-popup.is-visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   SMALL DECORATIVE LINE
+========================================================= */
+
+.word-meaning-popup::before {
+    content: "";
+
+    position: absolute;
+
+    top: -5px;
+    left: 50%;
+
+    width: 9px;
+    height: 9px;
+
+    transform:
+        translateX(-50%)
+        rotate(45deg);
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.40);
+
+    border-left:
+        1px solid
+        rgba(255, 255, 255, 0.40);
+
+    background:
+        rgba(251, 240, 245, 0.28);
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* =========================================================
+   WORD TITLE
+========================================================= */
+
+.word-meaning-title {
+    margin: 0 0 8px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+
+    font-weight: 400;
+
+    letter-spacing: 0.02em;
+
+    color:
+        rgba(255, 255, 255, 0.98);
+
+    line-height: 1.2;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   LARGE INITIAL LETTER
+========================================================= */
+
+.word-meaning-title .meaning-initial {
+    display: inline-block;
+
+    margin-right: 1px;
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    line-height: 0.8;
+
+    color:
+        rgba(255, 255, 255, 1);
+
+    text-shadow:
+        0 2px 12px
+        rgba(70, 45, 58, 0.18);
+}
+
+
+/* =========================================================
+   MEANING TEXT
+========================================================= */
+
+.word-meaning-description {
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 400;
+
+    line-height: 1.65;
+
+    letter-spacing: 0.055em;
+
+    text-align: center;
+
+    color:
+        rgba(255, 255, 255, 0.88);
+}
+
+
+/* =========================================================
+   SUBTLE DECORATIVE DOT
+========================================================= */
+
+.word-meaning-decoration {
+    width: 4px;
+    height: 4px;
+
+    margin:
+        12px
+        auto
+        0;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.68);
+
+    box-shadow:
+        0 0 8px
+        rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .word-meaning-popup {
+        width: min(260px, calc(100vw - 24px));
+
+        padding:
+            15px
+            16px
+            16px;
+
+        border-radius: 12px;
+    }
+
+    .word-meaning-title {
+        font-size: 15px;
+    }
+
+    .word-meaning-title .meaning-initial {
+        font-size: 22px;
+    }
+
+    .word-meaning-description {
+        font-size: 9px;
+
+        line-height: 1.6;
+
+        letter-spacing: 0.045em;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .word-meaning-popup {
+        transition: opacity 0.15s ease;
+        transform: none;
+    }
+
+    .word-meaning-popup.is-visible {
+        transform: none;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   EDITORIAL GRID
+--------------------------------------------------------- */
+
+.little-world-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(12, 1fr);
+
+    gap: 22px;
+
+    align-items: stretch;
+}
+
+
+/* Individual editorial positions */
+
+.item-art {
+    grid-column: span 7;
+}
+
+.item-music {
+    grid-column: span 5;
+}
+
+.item-memories {
+    grid-column: span 5;
+}
+
+.item-books {
+    grid-column: span 7;
+}
+
+.item-letter {
+    grid-column: span 5;
+}
+
+.item-videos {
+    grid-column: span 7;
+}
+
+
+/* ---------------------------------------------------------
+   CARD
+--------------------------------------------------------- */
+
+.little-world-card {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(93, 70, 83, 0.11);
+    border-radius: 3px;
+
+    background:
+        rgba(255, 255, 255, 0.47);
+
+    box-shadow:
+        0 18px 55px rgba(82, 59, 75, 0.055);
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        transform 0.6s cubic-bezier(.2,.7,.2,1),
+        box-shadow 0.6s ease,
+        background 0.6s ease;
+}
+
+.little-world-card:hover {
+    transform:
+        translateY(-7px)
+        scale(1.008);
+
+    background:
+        rgba(255, 255, 255, 0.72);
+
+    box-shadow:
+        0 28px 70px rgba(82, 59, 75, 0.11);
+}
+
+
+/* ---------------------------------------------------------
+   CARD VISUAL
+--------------------------------------------------------- */
+
+.little-world-card-visual {
+    position: relative;
+
+    height: 250px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6e9ec,
+            #f4edf1
+        );
+}
+
+.item-art .little-world-card-visual {
+    height: 310px;
+}
+
+.item-books .little-world-card-visual {
+    height: 290px;
+}
+
+.item-letter .little-world-card-visual,
+.item-videos .little-world-card-visual {
+    height: 260px;
+}
+
+
+/* ---------------------------------------------------------
+   ART VISUAL
+--------------------------------------------------------- */
+
+.art-visual {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(255,255,255,0.9),
+            transparent 45%
+        ),
+        linear-gradient(
+            145deg,
+            #eee0e6,
+            #f9f3f0
+        );
+}
+
+.art-paper {
+    width: 42%;
+    height: 75%;
+
+    padding: 15px;
+
+    background: #fffdf9;
+
+    box-shadow:
+        0 20px 45px rgba(75, 55, 66, 0.14);
+
+    transform:
+        rotate(-4deg);
+
+    transition:
+        transform 0.7s ease;
+}
+
+.little-world-card:hover .art-paper {
+    transform:
+        rotate(-1deg)
+        translateY(-5px);
+}
+
+.art-placeholder {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    border: 1px solid rgba(115, 88, 103, 0.12);
+
+    font-family: Georgia, serif;
+
+    font-size: 38px;
+
+    color: #b48a9b;
+}
+
+
+/* ---------------------------------------------------------
+   MUSIC VISUAL
+--------------------------------------------------------- */
+
+.music-visual {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.7),
+            transparent 50%
+        ),
+        linear-gradient(
+            135deg,
+            #ded4e4,
+            #eee1e7
+        );
+}
+
+.music-note {
+    position: relative;
+    z-index: 2;
+
+    font-family: Georgia, serif;
+
+    font-size: 95px;
+
+    font-weight: 300;
+
+    color: rgba(96, 72, 91, 0.45);
+
+    transition:
+        transform 0.7s ease;
+}
+
+.little-world-card:hover .music-note {
+    transform:
+        translateY(-8px)
+        rotate(-5deg);
+}
+
+.music-lines {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 17px;
+
+    padding: 0 12%;
+
+    opacity: 0.28;
+}
+
+.music-lines span {
+    display: block;
+
+    width: 100%;
+    height: 1px;
+
+    background: #675264;
+}
+
+
+/* ---------------------------------------------------------
+   MEMORIES VISUAL
+--------------------------------------------------------- */
+
+.memories-visual {
+    background:
+        linear-gradient(
+            145deg,
+            #e9dce2,
+            #f6e9e8
+        );
+}
+
+.memory-photo {
+    position: absolute;
+
+    width: 35%;
+    height: 58%;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.8),
+            rgba(220,198,207,0.75)
+        );
+
+    border: 8px solid rgba(255,255,255,0.85);
+
+    box-shadow:
+        0 18px 35px rgba(77,55,68,0.14);
+
+    transition:
+        transform 0.7s ease;
+}
+
+.photo-one {
+    left: 14%;
+    top: 18%;
+
+    transform:
+        rotate(-8deg);
+}
+
+.photo-two {
+    left: 34%;
+    top: 25%;
+
+    transform:
+        rotate(3deg);
+
+    z-index: 2;
+}
+
+.photo-three {
+    right: 12%;
+    top: 15%;
+
+    transform:
+        rotate(8deg);
+
+    z-index: 1;
+}
+
+.little-world-card:hover .photo-one {
+    transform:
+        rotate(-11deg)
+        translate(-5px,-4px);
+}
+
+.little-world-card:hover .photo-two {
+    transform:
+        rotate(2deg)
+        translateY(-7px);
+}
+
+.little-world-card:hover .photo-three {
+    transform:
+        rotate(11deg)
+        translate(5px,-4px);
+}
+
+
+/* ---------------------------------------------------------
+   BOOKS VISUAL
+--------------------------------------------------------- */
+
+.books-visual {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eee4dc,
+            #e9dfe5
+        );
+}
+
+.book {
+    position: absolute;
+
+    width: 23%;
+    height: 58%;
+
+    bottom: 18%;
+
+    border-radius: 2px 5px 5px 2px;
+
+    box-shadow:
+        8px 14px 28px rgba(70,50,61,0.16);
+
+    transition:
+        transform 0.7s ease;
+}
+
+.book-one {
+    background: #d8c3cd;
+
+    transform:
+        translateX(-65px)
+        rotate(-8deg);
+}
+
+.book-two {
+    background: #eee2dc;
+
+    transform:
+        translateY(-4px);
+}
+
+.book-three {
+    background: #cfc7d8;
+
+    transform:
+        translateX(65px)
+        rotate(8deg);
+}
+
+.little-world-card:hover .book-one {
+    transform:
+        translateX(-75px)
+        rotate(-11deg);
+}
+
+.little-world-card:hover .book-three {
+    transform:
+        translateX(75px)
+        rotate(11deg);
+}
+
+
+/* ---------------------------------------------------------
+   LETTER VISUAL
+--------------------------------------------------------- */
+
+.letter-visual {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #fff8f4,
+            #eadde4
+        );
+}
+
+.envelope {
+    position: relative;
+
+    width: 190px;
+    height: 125px;
+
+    filter:
+        drop-shadow(
+            0 18px 25px
+            rgba(75,55,67,0.14)
+        );
+
+    transition:
+        transform 0.7s ease;
+}
+
+.little-world-card:hover .envelope {
+    transform:
+        translateY(-8px)
+        rotate(-1deg);
+}
+
+.envelope-back {
+    position: absolute;
+
+    inset: 0;
+
+    background: #eee0e2;
+
+    border-radius: 3px;
+}
+
+.envelope-paper {
+    position: absolute;
+
+    left: 22px;
+    right: 22px;
+
+    top: -25px;
+
+    height: 85px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #fffdf9;
+
+    box-shadow:
+        0 5px 12px rgba(75,55,67,0.08);
+
+    font-family: Georgia, serif;
+
+    font-size: 14px;
+
+    font-style: italic;
+
+    color: #856b78;
+}
+
+.envelope-flap {
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left: 95px solid transparent;
+    border-right: 95px solid transparent;
+    border-top: 65px solid #e4d0d7;
+
+    z-index: 3;
+}
+
+.envelope-front {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 50%,
+            rgba(214,190,200,0.65) 50%
+        );
+
+    border-radius: 3px;
+
+    z-index: 4;
+}
+
+
+/* ---------------------------------------------------------
+   VIDEO VISUAL
+--------------------------------------------------------- */
+
+.videos-visual {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dcd6e2,
+            #eee2e5
+        );
+}
+
+.video-frame {
+    position: relative;
+
+    width: 62%;
+    aspect-ratio: 16 / 9;
+
+    border:
+        7px solid
+        rgba(255,255,255,0.78);
+
+    background:
+        linear-gradient(
+            145deg,
+            #b9a9b9,
+            #e4d1d9
+        );
+
+    box-shadow:
+        0 20px 40px
+        rgba(67,48,60,0.15);
+
+    transition:
+        transform 0.7s ease;
+}
+
+.little-world-card:hover .video-frame {
+    transform:
+        scale(1.025);
+}
+
+.video-play {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.65);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.35);
+
+    color: #594653;
+
+    font-size: 15px;
+
+    transform:
+        translate(-50%, -50%);
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* ---------------------------------------------------------
+   CARD INFORMATION
+--------------------------------------------------------- */
+
+.little-world-card-info {
+    display: grid;
+
+    grid-template-columns:
+        38px
+        1fr
+        30px;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        19px
+        20px
+        21px;
+}
+
+.little-world-card-number {
+    align-self: start;
+
+    padding-top: 3px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 0.12em;
+
+    color: #aa8e9d;
+}
+
+.little-world-card-info h3 {
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 22px;
+
+    font-weight: 400;
+
+    letter-spacing: -0.01em;
+
+    color: #4e3c48;
+}
+
+.little-world-card-info p {
+    margin:
+        5px
+        0
+        0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    color: #85717d;
+}
+
+.little-world-arrow {
+    justify-self: end;
+
+    font-size: 19px;
+
+    font-weight: 300;
+
+    color: #947888;
+
+    transition:
+        transform 0.4s ease;
+}
+
+.little-world-card:hover .little-world-arrow {
+    transform:
+        translate(3px,-3px);
+}
+
+
+/* ---------------------------------------------------------
+   FOOTER
+--------------------------------------------------------- */
+
+.little-world-footer {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding:
+        60px
+        0
+        20px;
+
+    text-align: center;
+
+    color: #917783;
+}
+
+.footer-butterfly {
+    font-size: 25px;
+
+    opacity: 0.65;
+
+    animation:
+        littleButterflyFloat
+        4s ease-in-out infinite;
+}
+
+.little-world-footer p {
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 13px;
+
+    font-style: italic;
+
+    letter-spacing: 0.02em;
+}
+
+.little-world-footer > span {
+    font-size: 11px;
+
+    opacity: 0.55;
+}
+
+@keyframes littleButterflyFloat {
+    0%, 100% {
+        transform:
+            translateY(0)
+            rotate(-3deg);
+    }
+
+    50% {
+        transform:
+            translateY(-7px)
+            rotate(3deg);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+    .little-world-content {
+        width: calc(100% - 28px);
+
+        padding:
+            65px
+            0
+            40px;
+    }
+
+    .little-world-close {
+        top: 16px;
+        right: 16px;
+
+        width: 42px;
+        height: 42px;
+    }
+
+    .little-world-title {
+        font-size: 48px;
+    }
+
+    .little-world-subtitle {
+        font-size: 14px;
+    }
+
+    .little-world-nav {
+        width: 100%;
+
+        border-radius: 18px;
+
+        justify-content: center;
+
+        gap: 3px;
+    }
+
+    .little-world-nav-item {
+        padding:
+            8px
+            10px;
+
+        font-size: 9px;
+    }
+
+    .little-world-grid {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 16px;
+    }
+
+    .little-world-card-visual,
+    .item-art .little-world-card-visual,
+    .item-books .little-world-card-visual,
+    .item-letter .little-world-card-visual,
+    .item-videos .little-world-card-visual {
+        height: 230px;
+    }
+
+    .little-world-card-info {
+        padding: 16px;
+    }
+
+    .little-world-card-info h3 {
+        font-size: 20px;
+    }
+
+    .little-world-card-info p {
+        font-size: 12px;
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .little-world,
+    .little-world *,
+    .little-world-backdrop {
+        animation: none !important;
+
+        transition-duration: 0.01ms !important;
+    }
+
+}
+
+/* =========================================================
+   LITTLE WORLD VIEWER
+========================================================= */
+
+.little-world-viewer {
+    position: fixed;
+    inset: 0;
+
+    z-index: 9500;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    background:
+        rgba(255, 252, 249, 0.97);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.45s ease,
+        visibility 0.45s ease;
+}
+
+.little-world-viewer.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+
+/* ---------------------------------------------------------
+   VIEWER CONTENT
+--------------------------------------------------------- */
+
+.little-world-viewer-inner {
+    width: min(900px, 92vw);
+    max-height: 88vh;
+
+    overflow-y: auto;
+
+    text-align: center;
+
+    transform:
+        translateY(24px)
+        scale(0.97);
+
+    opacity: 0;
+
+    transition:
+        transform 0.5s ease,
+        opacity 0.5s ease;
+}
+
+.little-world-viewer.is-open
+.little-world-viewer-inner {
+    transform:
+        translateY(0)
+        scale(1);
+
+    opacity: 1;
+}
+
+
+/* ---------------------------------------------------------
+   VIEWER TEXT
+--------------------------------------------------------- */
+
+.little-world-viewer-eyebrow {
+    margin-bottom: 12px;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.28em;
+
+    color: #987b8a;
+}
+
+.little-world-viewer-title {
+    margin: 0;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(42px, 6vw, 68px);
+
+    font-weight: 400;
+
+    line-height: 1;
+
+    letter-spacing: -0.035em;
+
+    color: #493944;
+}
+
+.little-world-viewer-description {
+    max-width: 520px;
+
+    margin:
+        18px auto
+        30px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    color: #75616e;
+}
+
+
+/* ---------------------------------------------------------
+   VIEWER CONTENT AREA
+--------------------------------------------------------- */
+
+.little-world-viewer-content {
+    width: 100%;
+    min-height: 220px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(93, 70, 83, 0.10);
+
+    border-radius: 4px;
+
+    background:
+        rgba(255, 255, 255, 0.55);
+
+    box-shadow:
+        0 25px 70px
+        rgba(82, 59, 75, 0.08);
+
+    padding: 30px;
+}
+
+
+/* ---------------------------------------------------------
+   VIEWER CLOSE
+--------------------------------------------------------- */
+
+.little-world-viewer-close {
+    position: absolute;
+
+    top: 28px;
+    right: 30px;
+
+    width: 48px;
+    height: 48px;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(85, 63, 76, 0.18);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.55);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.35s ease,
+        background 0.35s ease;
+}
+
+.little-world-viewer-close span {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 17px;
+    height: 1px;
+
+    background: #4a3945;
+}
+
+.little-world-viewer-close span:first-child {
+    transform:
+        translate(-50%, -50%)
+        rotate(45deg);
+}
+
+.little-world-viewer-close span:last-child {
+    transform:
+        translate(-50%, -50%)
+        rotate(-45deg);
+}
+
+.little-world-viewer-close:hover {
+    transform:
+        rotate(90deg)
+        scale(1.06);
+
+    background:
+        rgba(255, 255, 255, 0.85);
+}
+
+
+/* ---------------------------------------------------------
+   VIEWER MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+    .little-world-viewer {
+        padding: 24px;
+    }
+
+    .little-world-viewer-close {
+        top: 16px;
+        right: 16px;
+
+        width: 42px;
+        height: 42px;
+    }
+
+    .little-world-viewer-inner {
+        width: 94vw;
+    }
+
+    .little-world-viewer-content {
+        min-height: 180px;
+
+        padding: 20px;
+    }
+
+}
+
+        /* =========================================
+           MUSIC
+        ========================================= */
+
+        #musicControl {
+            position: fixed;
+
+            right: 1.5rem;
+            bottom: 1.5rem;
+
+            width: 48px;
+            height: 48px;
+
+            z-index: 200;
+
+            border-radius: 50%;
+
+            border: 1px solid var(--mauve);
+
+            background:
+                rgba(255,255,255,0.85);
+
+            backdrop-filter: blur(10px);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            font-size: 1.1rem;
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+        }
+
+        #musicControl:hover {
+            transform: scale(1.08);
+        }
+
+        #musicControl.playing {
+            background: var(--mauve);
+            color: white;
+        }
+
+/* =========================================================
+   FLOATING TOP NAVIGATION
+========================================================= */
+
+.glass-dashboard {
+    position: fixed;
+    top: 22px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    width: 100%;
+    padding: 0 36px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   LEFT BRAND
+========================================================= */
+
+.glass-dashboard-brand {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   BRAND TITLE
+========================================================= */
+
+.glass-brand-main {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   BRAND MARK
+========================================================= */
+
+.glass-brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 15px;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    text-shadow:
+        0 1px 8px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   BRAND NAME
+========================================================= */
+
+.glass-brand-name {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 17px;
+    font-weight: 400;
+
+    letter-spacing: 0.015em;
+
+    color: rgba(255, 255, 255, 0.96);
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 1px 9px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   RIGHT NAVIGATION
+========================================================= */
+
+.glass-dashboard-nav {
+    position: fixed;
+    top: 22px;
+    right: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    pointer-events: auto;
+}
+/* =========================================================
+   INDIVIDUAL FROSTED GLASS BUTTON
+========================================================= */
+
+.glass-nav-link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 68px;
+    height: 34px;
+
+    padding:
+        0
+        15px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.30);
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.19),
+            rgba(255, 244, 248, 0.10)
+        );
+
+    backdrop-filter:
+        blur(14px)
+        saturate(125%);
+
+    -webkit-backdrop-filter:
+        blur(14px)
+        saturate(125%);
+
+    box-shadow:
+        0 5px 18px
+        rgba(20, 15, 20, 0.10),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.28);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(255, 255, 255, 0.92);
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease,
+        color 0.3s ease;
+}
+
+
+/* =========================================================
+   SUBTLE ACTIVE INDICATOR
+========================================================= */
+
+.glass-nav-link::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 5px;
+
+    width: 0;
+    height: 1px;
+
+    transform:
+        translateX(-50%);
+
+    background:
+        rgba(255, 255, 255, 0.90);
+
+    transition:
+        width 0.3s ease;
+}
+
+
+.glass-nav-link.active {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.28),
+            rgba(255, 241, 247, 0.16)
+        );
+
+    border-color:
+        rgba(255, 255, 255, 0.44);
+
+    color:
+        rgba(255, 255, 255, 1);
+
+    box-shadow:
+        0 6px 22px
+        rgba(20, 15, 20, 0.13),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.38);
+}
+
+
+.glass-nav-link.active::after {
+    width: 16px;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.glass-nav-link:hover {
+    transform:
+        translateY(-1px);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.30),
+            rgba(255, 243, 248, 0.18)
+        );
+
+    border-color:
+        rgba(255, 255, 255, 0.50);
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 8px 25px
+        rgba(20, 15, 20, 0.15),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.42);
+}
+
+
+.glass-nav-link:hover::after {
+    width: 16px;
+}
+
+
+/* =========================================================
+   REMOVE OLD DECORATIVE DOTS
+========================================================= */
+
+.glass-dashboard-decoration {
+    display: none;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .glass-dashboard {
+        top: 13px;
+
+        padding:
+            0
+            16px;
+    }
+
+    .glass-dashboard-brand {
+        gap: 5px;
+    }
+
+    .glass-brand-mark {
+        width: 20px;
+
+        font-size: 12px;
+    }
+
+    .glass-brand-name {
+        font-size: 13px;
+    }
+
+    .glass-dashboard-nav {
+        gap: 5px;
+    }
+
+    .glass-nav-link {
+        min-width: auto;
+
+        height: 30px;
+
+        padding:
+            0
+            10px;
+
+        border-radius: 8px;
+
+        font-size: 7px;
+
+        letter-spacing: 0.09em;
+    }
+
+    .glass-nav-link::after {
+        bottom: 4px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+
+    .glass-dashboard {
+        padding:
+            0
+            10px;
+    }
+
+    .glass-brand-mark {
+        display: none;
+    }
+
+    .glass-brand-name {
+        font-size: 11px;
+    }
+
+    .glass-dashboard-nav {
+        gap: 3px;
+    }
+
+    .glass-nav-link {
+        height: 27px;
+
+        padding:
+            0
+            7px;
+
+        border-radius: 7px;
+
+        font-size: 6px;
+
+        letter-spacing: 0.06em;
+    }
+}
+/* =========================================================
+   A LITTLE WORLD — VERTICAL MEMORY STRIP
+========================================================= */
+
+.little-world-image-strip {
+    position: absolute;
+
+    /*
+       Starts directly below the brand title.
+       The strip is anchored to the left brand,
+       NOT to the entire screen.
+    */
+    top: 42px;
+    left: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: clamp(8px, 0.65vw, 11px);
+
+    width: max-content;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-12px);
+
+    transition:
+        opacity 0.35s ease,
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0.45s;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   INDIVIDUAL MEMORY IMAGE
+========================================================= */
+
+.little-world-mini-image {
+    /*
+       Responsive square size:
+       smaller on narrow screens,
+       larger on normal/large screens.
+    */
+    width: clamp(68px, 5vw, 88px);
+    height: clamp(68px, 5vw, 88px);
+
+    flex: 0 0 auto;
+
+    overflow: hidden;
+
+    border-radius: clamp(10px, 0.7vw, 14px);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.88),
+            rgba(248, 232, 238, 0.62)
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.82);
+
+    box-shadow:
+        0 8px 24px
+        rgba(60, 40, 52, 0.14),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.85);
+
+    opacity: 0;
+
+    transform:
+        translateY(-18px)
+        scale(0.88);
+
+    transition:
+        opacity 0.42s ease,
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.little-world-mini-image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    transition:
+        transform 0.45s ease,
+        filter 0.45s ease;
+}
+
+
+/* =========================================================
+   SUBTLE IMAGE HOVER
+========================================================= */
+
+.little-world-mini-image:hover img {
+    transform: scale(1.06);
+}
+
+.little-world-mini-image:hover {
+    box-shadow:
+        0 12px 30px
+        rgba(60, 40, 52, 0.18),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.92);
+}
+
+
+/* =========================================================
+   OPEN / HOVER STATE
+========================================================= */
+
+.glass-dashboard-brand:hover
+.little-world-image-strip,
+
+.glass-dashboard-brand.is-open
+.little-world-image-strip {
+
+    opacity: 1;
+    visibility: visible;
+
+    transform: translateY(0);
+
+    pointer-events: auto;
+
+    transition:
+        opacity 0.35s ease,
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0s;
+}
+
+
+/* =========================================================
+   SEQUENTIAL IMAGE REVEAL
+========================================================= */
+
+.glass-dashboard-brand:hover
+.little-world-mini-image,
+
+.glass-dashboard-brand.is-open
+.little-world-mini-image {
+
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   STAGGER
+========================================================= */
+
+.glass-dashboard-brand:hover
+.little-world-mini-image:nth-child(1),
+
+.glass-dashboard-brand.is-open
+.little-world-mini-image:nth-child(1) {
+    transition-delay: 0.04s;
+}
+
+
+.glass-dashboard-brand:hover
+.little-world-mini-image:nth-child(2),
+
+.glass-dashboard-brand.is-open
+.little-world-mini-image:nth-child(2) {
+    transition-delay: 0.11s;
+}
+
+
+.glass-dashboard-brand:hover
+.little-world-mini-image:nth-child(3),
+
+.glass-dashboard-brand.is-open
+.little-world-mini-image:nth-child(3) {
+    transition-delay: 0.18s;
+}
+
+
+.glass-dashboard-brand:hover
+.little-world-mini-image:nth-child(4),
+
+.glass-dashboard-brand.is-open
+.little-world-mini-image:nth-child(4) {
+    transition-delay: 0.25s;
+}
+
+
+.glass-dashboard-brand:hover
+.little-world-mini-image:nth-child(5),
+
+.glass-dashboard-brand.is-open
+.little-world-mini-image:nth-child(5) {
+    transition-delay: 0.32s;
+}
+         
+
+/* =========================================================
+   OPENING TITLE — CINEMATIC FIRST FRAME
+========================================================= */
+
+.opening-title {
+    position: absolute;
+    z-index: 20;
+    left: 80%;
+    top: 29%;
+    width: min(34vw, 520px);
+    max-width: calc(100vw - 32px);
+    text-align: left;
+    pointer-events: none;
+    color: #fffaf7;
+    transform: translate3d(calc(-50% + var(--opening-title-exit)), -50%, 0);
+    will-change: transform, opacity;
+    --opening-title-exit: 0px;
+}
+
+.opening-title-content {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: openingTitleFloat 8s ease-in-out infinite;
+    filter: drop-shadow(0 5px 24px rgba(78, 52, 58, 0.12));
+}
+
+.opening-title h1 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(3.45rem, 4.8vw, 5.2rem);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    text-shadow:
+        0 2px 22px rgba(255, 255, 255, 0.55),
+        0 8px 35px rgba(83, 57, 67, 0.12);
+}
+
+.opening-title p {
+    margin: clamp(12px, 1.3vw, 20px) 0 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(0.72rem, 1.05vw, 1rem);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    color: rgba(255, 250, 247, 0.86);
+    text-shadow: 0 2px 15px rgba(83, 57, 67, 0.14);
+}
+
+@keyframes openingTitleFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@media (max-width: 1100px) and (orientation: landscape) {
+    .opening-title {
+        left: 71%;
+        top: 28%;
+        width: min(38vw, 390px);
+    }
+
+    .opening-title h1 {
+        font-size: clamp(2.15rem, 5vw, 4.2rem);
+    }
+
+    .opening-title p {
+        font-size: clamp(0.64rem, 1.25vw, 0.88rem);
+        letter-spacing: 0.055em;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .opening-title {
+        left: 70%;
+        top: 27%;
+        width: min(39vw, 300px);
+    }
+
+    .opening-title h1 {
+        font-size: clamp(1.75rem, 5.7vw, 3rem);
+    }
+
+    .opening-title p {
+        margin-top: 9px;
+        font-size: clamp(0.56rem, 1.45vw, 0.75rem);
+        letter-spacing: 0.035em;
+    }
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+    .opening-title {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .opening-title-content {
+        animation: none;
+    }
+}
+
+/* =========================================================
+   FINAL FRAME — MEMORY CAROUSEL
+========================================================= */
+
+.final-memory-carousel {
+    position: fixed;
+    right: clamp(18px, 2.4vw, 42px);
+    top: 39%;
+    width: min(clamp(220px, 16vw, 292px), 31vw);
+    max-height: 48vh;
+    z-index: 35;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    /* Begin completely outside the right edge. */
+    transform: translate3d(calc(100vw + 40px), -50%, 0) scale(0.94);
+
+    transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.35s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 1.35s;
+}
+
+.final-memory-carousel.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate3d(0, -50%, 0) scale(1);
+
+    transition:
+        opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.35s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 0s;
+}
+
+/* The gentle floating motion lives on the inner card so it does not
+   interfere with the entrance animation of the outer container. */
+.final-memory-carousel.is-visible .final-memory-carousel-button {
+    animation: finalMemoryFloat 6.5s ease-in-out infinite;
+}
+
+@keyframes finalMemoryFloat {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, -4px, 0);
+    }
+}
+
+.final-memory-carousel.is-visible:hover .final-memory-carousel-button {
+    transform: translate3d(0, -6px, 0) scale(1.012);
+}
+
+.final-memory-carousel-button {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    border-radius: 19px;
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.46),
+            rgba(255, 247, 249, 0.22));
+    box-shadow:
+        0 18px 42px rgba(70, 45, 57, 0.15),
+        0 3px 14px rgba(255, 255, 255, 0.28) inset;
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    color: #493944;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    transform-origin: center;
+    will-change: transform;
+}
+
+.final-memory-carousel-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 15% 10%,
+            rgba(255, 255, 255, 0.58),
+            transparent 31%),
+        linear-gradient(120deg,
+            transparent 35%,
+            rgba(255, 255, 255, 0.16) 50%,
+            transparent 65%);
+    opacity: 0.72;
+}
+
+.final-memory-kicker,
+.final-memory-caption,
+.final-memory-arrow,
+.final-memory-window {
+    position: relative;
+    z-index: 1;
+}
+
+.final-memory-kicker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1px 3px 7px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.21em;
+    text-transform: uppercase;
+    color: rgba(73, 57, 68, 0.65);
+}
+
+.final-memory-kicker::after {
+    content: "✦";
+    font-size: 9px;
+    color: #a77f91;
+}
+
+.final-memory-window {
+    position: relative;
+    height: auto;
+    aspect-ratio: 1.45 / 1;
+    max-height: 34vh;
+    overflow: hidden;
+    border-radius: 13px;
+    background: rgba(247, 238, 239, 0.34);
+}
+
+.final-memory-slide {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    transform: translateX(10%) scale(0.985);
+    transition:
+        opacity 0.95s ease,
+        transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.final-memory-slide.is-active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+}
+
+.final-memory-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+    user-select: none;
+    -webkit-user-drag: none;
+    box-shadow: 0 7px 20px rgba(70, 45, 57, 0.12);
+}
+
+.final-memory-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 13px;
+    pointer-events: none;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.34),
+        inset 0 -55px 55px rgba(47, 31, 41, 0.07);
+}
+
+.final-memory-caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 3px 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(73, 57, 68, 0.78);
+}
+
+.final-memory-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
+    border: 1px solid rgba(86, 61, 76, 0.16);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.32);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.final-memory-carousel-button:hover .final-memory-arrow {
+    transform: translate(2px, -2px);
+    background: rgba(255, 255, 255, 0.58);
+}
+
+.final-memory-dots {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 7px;
+}
+
+.final-memory-dot {
+    width: 4px;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(73, 57, 68, 0.23);
+    transition: width 0.35s ease, border-radius 0.35s ease, background 0.35s ease;
+}
+
+.final-memory-dot.is-active {
+    width: 14px;
+    border-radius: 10px;
+    background: rgba(167, 127, 145, 0.78);
+}
+
+@media (max-width: 1100px) and (orientation: landscape) {
+    .final-memory-carousel {
+        right: clamp(12px, 2.2vw, 24px);
+        top: 40%;
+        width: min(clamp(185px, 24vw, 250px), 39vw);
+        max-height: 46vh;
+    }
+
+    .final-memory-window {
+        aspect-ratio: 1.45 / 1;
+        max-height: 31vh;
+    }
+
+    .final-memory-carousel-button {
+        padding: clamp(6px, 0.8vw, 8px);
+        border-radius: 16px;
+    }
+
+    .final-memory-kicker {
+        font-size: clamp(6px, 0.75vw, 7px);
+        margin-bottom: 6px;
+    }
+
+    .final-memory-caption {
+        font-size: clamp(10px, 1.2vw, 12px);
+    }
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+    .final-memory-carousel {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .final-memory-carousel,
+    .final-memory-carousel.is-visible,
+    .final-memory-slide,
+    .final-memory-dot {
+        transition: none;
+    }
+
+    .final-memory-carousel.is-visible .final-memory-carousel-button {
+        animation: none;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+<!-- =========================================================
+     FLOATING FROSTED GLASS NAVIGATION
+========================================================= -->
+
+<header class="glass-dashboard" id="glassDashboard">
+
+<div
+    class="glass-dashboard-brand"
+    id="littleWorldBrand"
+    tabindex="0"
+    aria-label="Open A Little World memories"
+>
+
+    <div class="glass-brand-main">
+
+        <span class="glass-brand-mark">✦</span>
+
+        <span class="glass-brand-name">
+            Mahinoor 
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         LITTLE WORLD IMAGE STRIP
+    ====================================================== -->
+
+    <div
+        class="little-world-image-strip"
+        id="littleWorldImageStrip"
+    >
+
+        <div class="little-world-mini-image image-one">
+            <img
+                src="./assets/photos/world-01.jpg"
+                alt="Memory 1"
+            >
+        </div>
+
+        <div class="little-world-mini-image image-two">
+            <img
+                src="./assets/photos/world-02.jpg"
+                alt="Memory 2"
+            >
+        </div>
+
+        <div class="little-world-mini-image image-three">
+            <img
+                src="./assets/photos/world-03.jpg"
+                alt="Memory 3"
+            >
+        </div>
+
+        <div class="little-world-mini-image image-four">
+            <img
+                src="./assets/photos/world-04.jpg"
+                alt="Memory 4"
+            >
+        </div>
+
+        <div class="little-world-mini-image image-five">
+            <img
+                src="./assets/photos/world-05.jpg"
+                alt="Memory 5"
+            >
+
+    </div>
+
+</div>
+    <nav class="glass-dashboard-nav" aria-label="Little World navigation">
+
+        <button type="button" class="glass-nav-link active">
+            Shafqat
+        </button>
+
+        <button type="button" class="glass-nav-link">
+            Arha
+        </button>
+
+        <button type="button" class="glass-nav-link">
+            Ranaai
+        </button>
+
+        <button type="button" class="glass-nav-link">
+            Hayfa
+        </button>
+
+        <button type="button" class="glass-nav-link">
+            Anjum
+        </button>
+
+    </nav>
+
+    <div class="glass-dashboard-decoration">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+</header>
+
+    <!-- MOBILE PORTRAIT NOTICE -->
+<div id="portraitNotice" class="portrait-notice">
+    <div class="portrait-content">
+        <div class="portrait-butterfly">🦋</div>
+
+        <h2>Turn your phone sideways</h2>
+
+        <p>
+            This little world is best experienced<br>
+            in landscape.
+        </p>
+
+        <div class="rotate-icon">↻</div>
+    </div>
+</div>
+
+    <!-- =========================================
+         CINEMATIC STORY
+    ========================================= -->
+    <section class="cinematic-scroll" id="cinematicScroll">
+        <div class="sticky-stage">
+
+            <!-- =========================================
+                 FINAL FRAME MEMORY CAROUSEL
+            ========================================== -->
+            <aside
+                class="final-memory-carousel"
+                id="finalMemoryCarousel"
+                aria-hidden="true"
+            >
+                <button
+                    type="button"
+                    class="final-memory-carousel-button"
+                    id="finalMemoryCarouselButton"
+                    aria-label="Open A Little World collection"
+                >
+                    <div class="final-memory-kicker">
+                        A few little memories
+                    </div>
+
+                    <div class="final-memory-window" id="finalMemoryWindow">
+                        <figure class="final-memory-slide is-active">
+                            <img src="./assets/photos/world-01.jpg" alt="A little memory" loading="eager">
+                        </figure>
+                        <figure class="final-memory-slide">
+                            <img src="./assets/photos/world-02.jpg" alt="A little memory" loading="lazy">
+                        </figure>
+                        <figure class="final-memory-slide">
+                            <img src="./assets/photos/world-03.jpg" alt="A little memory" loading="lazy">
+                        </figure>
+                        <figure class="final-memory-slide">
+                            <img src="./assets/photos/world-04.jpg" alt="A little memory" loading="lazy">
+                        </figure>
+                        <figure class="final-memory-slide">
+                            <img src="./assets/photos/world-05.jpg" alt="A little memory" loading="lazy">
+                        </figure>
+                    </div>
+
+                    <div class="final-memory-caption">
+                        <span>There is a little more to see</span>
+                        <span class="final-memory-arrow" aria-hidden="true">↗</span>
+                    </div>
+
+                    <div class="final-memory-dots" id="finalMemoryDots" aria-hidden="true">
+                        <span class="final-memory-dot is-active"></span>
+                        <span class="final-memory-dot"></span>
+                        <span class="final-memory-dot"></span>
+                        <span class="final-memory-dot"></span>
+                        <span class="final-memory-dot"></span>
+                    </div>
+                </button>
+            </aside>
+
+            <div class="opening-title" id="openingTitle" aria-hidden="true">
+                <div class="opening-title-content">
+                    <h1>Mahinoor</h1>
+                    <p>A little world, made just for you</p>
+                </div>
+            </div>
+
+            <div class="opening-white-fade" id="openingWhiteFade" aria-hidden="true"></div>
+            <canvas id="cinematicCanvas" aria-hidden="true"></canvas>
+        </div>
+    </section>
+
+    <!-- =========================================
+         LOADING
+    ========================================= -->
+
+    <div id="loadingScreen">
+
+        <div class="loading-text">
+            Entering your little world...
+        </div>
+
+        <div class="loading-progress">
+            <div id="loadingBar"></div>
+        </div>
+
+        <div id="loadingPercent">
+            0%
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         BIRTHDAY ENDING
+    ========================================= -->
+
+    <div id="birthdayEnding">
+
+        <h2 class="birthday-title">
+            Happy Birthday
+        </h2>
+
+        <p class="birthday-message">
+            To someone who makes ordinary moments
+            feel a little more magical.
+        </p>
+
+        <p
+            class="birthday-name"
+            id="birthdayName"
+        >
+            Happy Birthday, MAHINOOR ♡
+        </p>
+
+        <button
+            class="collection-trigger"
+            id="collectionTrigger"
+            type="button"
+            aria-expanded="false"
+            onclick="window.location.href = 'collection.html';"
+        >
+            One more thing ✦
+        </button>
+
+    </div>
+
+
+<!-- =====================================
+     LITTLE WORLD VIEWER
+====================================== -->
+
+<div
+    id="littleWorldViewer"
+    class="little-world-viewer"
+    aria-hidden="true"
+>
+
+    <button
+        id="littleWorldViewerClose"
+        class="little-world-viewer-close"
+        type="button"
+        aria-label="Close viewer"
+    >
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="little-world-viewer-inner">
+
+        <div
+            id="littleWorldViewerEyebrow"
+            class="little-world-viewer-eyebrow"
+        >
+            A LITTLE WORLD
+        </div>
+
+        <h3
+            id="littleWorldViewerTitle"
+            class="little-world-viewer-title"
+        >
+            Art
+        </h3>
+
+        <p
+            id="littleWorldViewerDescription"
+            class="little-world-viewer-description"
+        >
+            A little piece of your world.
+        </p>
+
+        <div
+            id="littleWorldViewerContent"
+            class="little-world-viewer-content"
+        ></div>
+
+    </div>
+
+</div>
+
+</div>
+
+    <!-- =========================================
+         MUSIC
+    ========================================= -->
+
+    <button
+        id="musicControl"
+        aria-label="Toggle background music"
+        title="Music"
+    >
+        ♪
+    </button>
+
+
+    <audio
+        id="backgroundMusic"
+        loop
+        preload="metadata"
+    >
+        <source
+            src="./assets/audio/background.mp3"
+            type="audio/mpeg"
+        >
+    </audio>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================= -->
+
+    <script>
+
+        /* =========================================
+           CONFIGURATION
+        ========================================= */
+
+        const CONFIG = {
+
+            /*
+             * IMPORTANT:
+             * Your actual files are:
+             *
+             * 0001.webp
+             * 0002.webp
+             * ...
+             * 0611.webp
+             */
+
+            framePath: "./frames-webp/",
+
+            frameExtension: "webp",
+
+            totalFrames: 611,
+
+            framePadding: 4,
+
+            firstFrame: 1,
+
+            birthdayName: "[NAME]",
+
+            scrollHeight: 650
+
+        };
+
+
+        /* =========================================
+           STATE
+        ========================================= */
+
+        const state = {
+
+            currentFrame: 1,
+
+            targetFrame: 1,
+
+            scrollProgress: 0,
+
+            frames: new Map(),
+
+            loadingComplete: false,
+
+            musicPlaying: false,
+
+
+            finalMemoryIndex: 0,
+
+            finalMemoryTimer: null,
+
+            lastRenderedFrame: 0,
+
+            rafId: null
+
+        };
+
+
+        /* =========================================
+           ELEMENTS
+        ========================================= */
+
+        const canvas =
+            document.getElementById("cinematicCanvas");
+
+        const ctx =
+            canvas.getContext("2d", {
+                alpha: false
+            });
+
+        const loadingScreen =
+            document.getElementById("loadingScreen");
+
+        const loadingBar =
+            document.getElementById("loadingBar");
+
+        const loadingPercent =
+            document.getElementById("loadingPercent");
+
+        const openingWhiteFade =
+            document.getElementById("openingWhiteFade");
+
+        const openingTitle =
+            document.getElementById("openingTitle");
+
+        const finalMemoryCarousel =
+            document.getElementById("finalMemoryCarousel");
+
+        const finalMemoryCarouselButton =
+            document.getElementById("finalMemoryCarouselButton");
+
+        const finalMemorySlides =
+            document.querySelectorAll(".final-memory-slide");
+
+        const finalMemoryDots =
+            document.querySelectorAll(".final-memory-dot");
+
+        const cinematicScroll =
+            document.getElementById("cinematicScroll");
+
+        const birthdayEnding =
+            document.getElementById("birthdayEnding");
+
+        const birthdayName =
+            document.getElementById("birthdayName");
+
+        const collectionTrigger =
+            document.getElementById("collectionTrigger");
+
+        const musicControl =
+            document.getElementById("musicControl");
+
+        const backgroundMusic =
+            document.getElementById("backgroundMusic");
+
+/* =========================================
+           CANVAS
+        ========================================= */
+
+        function setupCanvas() {
+
+            canvas.width = 1280;
+            canvas.height = 720;
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+
+        }
+
+
+        /* =========================================
+           FRAME URL
+        ========================================= */
+
+        function frameFilename(frameNumber) {
+
+            return String(frameNumber)
+                .padStart(CONFIG.framePadding, "0")
+                + "."
+                + CONFIG.frameExtension;
+
+        }
+
+
+        function frameURL(frameNumber) {
+
+            return (
+                CONFIG.framePath +
+                frameFilename(frameNumber)
+            );
+
+        }
+
+
+        /* =========================================
+           LOAD ONE FRAME
+        ========================================= */
+
+        function loadFrame(frameNumber) {
+
+            if (state.frames.has(frameNumber)) {
+
+                return Promise.resolve(
+                    state.frames.get(frameNumber)
+                );
+
+            }
+
+
+            return new Promise((resolve, reject) => {
+
+                const image = new Image();
+
+                image.decoding = "async";
+
+                image.onload = () => {
+
+                    state.frames.set(
+                        frameNumber,
+                        image
+                    );
+
+                    resolve(image);
+
+                };
+
+
+                image.onerror = () => {
+
+                    console.error(
+                        "Could not load:",
+                        frameURL(frameNumber)
+                    );
+
+                    reject(
+                        new Error(
+                            "Frame failed: " +
+                            frameNumber
+                        )
+                    );
+
+                };
+
+
+                image.src =
+                    frameURL(frameNumber);
+
+            });
+
+        }
+
+
+        /* =========================================
+           LOAD INITIAL FRAMES
+        ========================================= */
+
+        async function loadInitialFrames() {
+
+            /*
+             * We load the first 30 frames before
+             * allowing the user to enter the story.
+             *
+             * This prevents the opening from
+             * immediately showing a blank canvas.
+             */
+
+            const initialCount =
+                Math.min(
+                    30,
+                    CONFIG.totalFrames
+                );
+
+
+            for (
+                let i = 0;
+                i < initialCount;
+                i++
+            ) {
+
+                const frameNumber =
+                    CONFIG.firstFrame + i;
+
+                try {
+
+                    await loadFrame(
+                        frameNumber
+                    );
+
+                } catch (error) {
+
+                    console.warn(error);
+
+                }
+
+
+                const percent =
+                    Math.round(
+                        ((i + 1) /
+                        initialCount) * 100
+                    );
+
+                loadingBar.style.width =
+                    percent + "%";
+
+                loadingPercent.textContent =
+                    percent + "%";
+
+            }
+
+
+            /*
+             * Draw the first frame immediately.
+             */
+
+            state.currentFrame =
+                CONFIG.firstFrame;
+
+            state.targetFrame =
+                CONFIG.firstFrame;
+
+            renderFrame(
+                CONFIG.firstFrame
+            );
+
+
+            state.loadingComplete = true;
+
+
+            /*
+             * Hide loading screen.
+             */
+
+            setTimeout(() => {
+
+                loadingScreen.classList.add(
+                    "hidden"
+                );
+
+            }, 500);
+
+
+            /*
+             * Continue loading the rest
+             * quietly in the background.
+             */
+
+            loadRemainingFrames();
+
+        }
+
+
+        /* =========================================
+           LOAD REMAINING FRAMES
+        ========================================= */
+
+        async function loadRemainingFrames() {
+
+            /*
+             * Load in small batches.
+             *
+             * This prevents the browser from
+             * opening 581 image requests at once.
+             */
+
+            const batchSize = 12;
+
+
+            for (
+                let start =
+                    CONFIG.firstFrame + 30;
+
+                start <=
+                    CONFIG.totalFrames;
+
+                start += batchSize
+            ) {
+
+                const end =
+                    Math.min(
+                        start + batchSize - 1,
+                        CONFIG.totalFrames
+                    );
+
+
+                const promises = [];
+
+
+                for (
+                    let frame = start;
+                    frame <= end;
+                    frame++
+                ) {
+
+                    promises.push(
+                        loadFrame(frame)
+                            .catch(() => null)
+                    );
+
+                }
+
+
+                await Promise.all(promises);
+
+
+                /*
+                 * Give the browser a tiny breathing
+                 * space before the next batch.
+                 */
+
+                await new Promise(
+                    resolve =>
+                        setTimeout(resolve, 10)
+                );
+
+            }
+
+
+            console.log(
+                "All frames loaded:",
+                state.frames.size
+            );
+
+        }
+
+
+        /* =========================================
+           RENDER FRAME
+        ========================================= */
+
+        function renderFrame(frameNumber) {
+
+            frameNumber =
+                Math.round(frameNumber);
+
+
+            frameNumber =
+                Math.max(
+                    CONFIG.firstFrame,
+                    Math.min(
+                        CONFIG.totalFrames,
+                        frameNumber
+                    )
+                );
+
+
+            const image =
+                state.frames.get(frameNumber);
+
+
+            /*
+             * If the requested frame isn't loaded
+             * yet, keep the last visible frame.
+             */
+
+            if (!image) {
+
+                return;
+
+            }
+
+
+            /*
+             * Avoid rendering the exact same
+             * frame repeatedly.
+             */
+
+            if (
+                frameNumber ===
+                state.lastRenderedFrame
+            ) {
+
+                return;
+
+            }
+
+
+            state.lastRenderedFrame =
+                frameNumber;
+
+
+            const canvasWidth =
+                canvas.width;
+
+            const canvasHeight =
+                canvas.height;
+
+
+            const imageRatio =
+                image.width /
+                image.height;
+
+            const canvasRatio =
+                canvasWidth /
+                canvasHeight;
+
+
+            let width;
+            let height;
+            let x;
+            let y;
+
+
+            if (
+                canvasRatio >
+                imageRatio
+            ) {
+
+                height =
+                    canvasHeight;
+
+                width =
+                    height *
+                    imageRatio;
+
+                x =
+                    (canvasWidth -
+                    width) / 2;
+
+                y = 0;
+
+            } else {
+
+                width =
+                    canvasWidth;
+
+                height =
+                    width /
+                    imageRatio;
+
+                x = 0;
+
+                y =
+                    (canvasHeight -
+                    height) / 2;
+
+            }
+
+
+            ctx.fillStyle =
+                "#f4e7e7";
+
+            ctx.fillRect(
+                0,
+                0,
+                canvasWidth,
+                canvasHeight
+            );
+
+
+            ctx.drawImage(
+                image,
+                x,
+                y,
+                width,
+                height
+            );
+
+        }
+
+
+        /* =========================================
+           SCROLL → FRAME
+        ========================================= */
+
+        function updateScroll() {
+
+            if (!state.loadingComplete) {
+                return;
+            }
+
+
+            const rect =
+                cinematicScroll.getBoundingClientRect();
+
+
+            const totalScrollable =
+                cinematicScroll.offsetHeight -
+                window.innerHeight;
+
+
+            const passed =
+                Math.max(
+                    0,
+                    Math.min(
+                        totalScrollable,
+                        -rect.top
+                    )
+                );
+
+
+            state.scrollProgress =
+                totalScrollable > 0
+                    ? passed / totalScrollable
+                    : 0;
+
+            /* Smoothly remove the opening white veil during the first 8% of scrolling. */
+            if (openingWhiteFade) {
+                const fadeRange = 0.08;
+                const fadeProgress = Math.min(
+                    state.scrollProgress / fadeRange,
+                    1
+                );
+
+                openingWhiteFade.style.opacity =
+                    String(1 - fadeProgress);
+            }
+
+            updateOpeningTitle();
+            updateFinalMemoryCarousel();
+
+
+            state.targetFrame =
+                CONFIG.firstFrame +
+                state.scrollProgress *
+                (CONFIG.totalFrames -
+                CONFIG.firstFrame);
+
+
+
+            /*
+             * Birthday ending appears only
+             * during the final part.
+             */
+
+            if (
+                state.scrollProgress >
+                0.91
+            ) {
+
+                birthdayEnding.classList.add(
+                    "visible"
+                );
+
+            } else {
+
+                birthdayEnding.classList.remove(
+                    "visible"
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           ANIMATION LOOP
+        ========================================= */
+
+        function animate() {
+
+            if (state.loadingComplete) {
+
+                /*
+                 * Smooth cinematic movement.
+                 */
+
+                const difference =
+                    state.targetFrame -
+                    state.currentFrame;
+
+
+                state.currentFrame +=
+                    difference * 0.14;
+
+
+                if (
+                    Math.abs(difference) <
+                    0.05
+                ) {
+
+                    state.currentFrame =
+                        state.targetFrame;
+
+                }
+
+
+                renderFrame(
+                    state.currentFrame
+                );
+
+
+
+            }
+
+
+            state.rafId =
+                requestAnimationFrame(
+                    animate
+                );
+
+        }
+
+
+        /* =========================================
+           FINAL FRAME MEMORY CAROUSEL
+        ========================================= */
+
+        function setFinalMemorySlide(index) {
+
+            if (!finalMemorySlides.length) {
+                return;
+            }
+
+            state.finalMemoryIndex =
+                (index + finalMemorySlides.length) %
+                finalMemorySlides.length;
+
+            finalMemorySlides.forEach(
+                (slide, slideIndex) => {
+
+                    slide.classList.toggle(
+                        "is-active",
+                        slideIndex === state.finalMemoryIndex
+                    );
+
+                }
+            );
+
+            finalMemoryDots.forEach(
+                (dot, dotIndex) => {
+
+                    dot.classList.toggle(
+                        "is-active",
+                        dotIndex === state.finalMemoryIndex
+                    );
+
+                }
+            );
+
+        }
+
+
+        function startFinalMemoryCarousel() {
+
+            if (state.finalMemoryTimer || finalMemorySlides.length < 2) {
+                return;
+            }
+
+            state.finalMemoryTimer =
+                setInterval(() => {
+
+                    if (!false) {
+                        setFinalMemorySlide(
+                            state.finalMemoryIndex + 1
+                        );
+                    }
+
+                }, 3600);
+
+        }
+
+
+        function stopFinalMemoryCarousel() {
+
+            if (!state.finalMemoryTimer) {
+                return;
+            }
+
+            clearInterval(
+                state.finalMemoryTimer
+            );
+
+            state.finalMemoryTimer = null;
+
+        }
+
+
+        function updateOpeningTitle() {
+            if (!openingTitle) {
+                return;
+            }
+
+            /*
+             * The title belongs only to the opening moment.
+             * It physically exits to the right early in the story,
+             * rather than fading into the background.
+             */
+            const progress = state.scrollProgress;
+            const exitStart = 0.012;
+            const exitEnd = 0.145;
+
+            let exitProgress = 0;
+
+            if (progress > exitStart) {
+                exitProgress = Math.min(
+                    (progress - exitStart) / (exitEnd - exitStart),
+                    1
+                );
+            }
+
+            const easedProgress =
+                1 - Math.pow(1 - exitProgress, 3);
+
+            const exitDistance =
+                easedProgress * (window.innerWidth * 1.22);
+
+            openingTitle.style.setProperty(
+                "--opening-title-exit",
+                `${exitDistance}px`
+            );
+
+            openingTitle.style.opacity =
+                exitProgress > 0.82
+                    ? String(Math.max(0, 1 - ((exitProgress - 0.82) / 0.18)))
+                    : "1";
+        }
+
+
+        function updateFinalMemoryCarousel() {
+
+            if (!finalMemoryCarousel) {
+                return;
+            }
+
+            const showFrom = 0.79;
+            const fullySettledFrom = 0.84;
+            const hideAfter = 1.01;
+
+            const progress = state.scrollProgress;
+
+            if (progress >= showFrom && progress < hideAfter) {
+
+                finalMemoryCarousel.classList.add("is-visible");
+                finalMemoryCarousel.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+                startFinalMemoryCarousel();
+
+                if (progress < fullySettledFrom) {
+                    finalMemoryCarousel.style.setProperty(
+                        "--final-carousel-progress",
+                        String(
+                            Math.min(
+                                (progress - showFrom) /
+                                (fullySettledFrom - showFrom),
+                                1
+                            )
+                        )
+                    );
+                }
+
+            } else {
+
+                finalMemoryCarousel.classList.remove("is-visible");
+                finalMemoryCarousel.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                if (progress < showFrom) {
+                    stopFinalMemoryCarousel();
+                }
+
+            }
+
+        }
+
+
+        /* =========================================
+           MUSIC
+        ========================================= */
+
+        async function toggleMusic() {
+
+            if (
+                state.musicPlaying
+            ) {
+
+                backgroundMusic.pause();
+
+                state.musicPlaying =
+                    false;
+
+                musicControl.classList.remove(
+                    "playing"
+                );
+
+                musicControl.textContent =
+                    "♪";
+
+                return;
+
+            }
+
+
+            try {
+
+                await backgroundMusic.play();
+
+                state.musicPlaying =
+                    true;
+
+                musicControl.classList.add(
+                    "playing"
+                );
+
+                musicControl.textContent =
+                    "♫";
+
+            } catch (error) {
+
+                console.warn(
+                    "Music could not start.",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           EVENT LISTENERS
+        ========================================= */
+
+        window.addEventListener(
+            "scroll",
+            updateScroll,
+            {
+                passive: true
+            }
+        );
+
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                /*
+                 * Canvas remains 1280×720.
+                 * CSS scales it to the viewport.
+                 */
+
+                renderFrame(
+                    Math.round(
+                        state.currentFrame
+                    )
+                );
+
+            }
+        );
+
+
+        /* =========================================
+           CAROUSEL IMAGE FALLBACKS
+        ========================================= */
+
+        finalMemorySlides.forEach(
+            (slide, index) => {
+
+                const image =
+                    slide.querySelector("img");
+
+                if (!image) {
+                    return;
+                }
+
+                image.addEventListener(
+                    "error",
+                    () => {
+
+                        /*
+                         * If a personal photo has not yet been placed
+                         * in assets/photos, use a beautiful frame from
+                         * the cinematic story instead of showing a
+                         * broken-image icon. Replace the photo later
+                         * without changing the carousel code.
+                         */
+                        image.src =
+                            `./frames-webp/${String(
+                                575 + (index * 7)
+                            ).padStart(4, "0")}.webp`;
+
+                    },
+                    { once: true }
+                );
+
+            }
+        );
+
+
+        /* =========================
+   LITTLE WORLD FILTERS
+========================= */
+
+const collectionFilterButtons =
+    document.querySelectorAll(
+        ".little-world-nav button"
+    );
+
+const collectionItems =
+    document.querySelectorAll(
+        ".little-world-card"
+    );
+
+collectionFilterButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const selectedCategory =
+                    button.textContent
+                        .trim()
+                        .toLowerCase();
+
+                collectionFilterButtons
+                    .forEach(
+                        otherButton => {
+                            otherButton.classList.remove(
+                                "active"
+                            );
+                        }
+                    );
+
+                button.classList.add(
+                    "active"
+                );
+
+                collectionItems.forEach(
+                    item => {
+
+                        if (
+                            selectedCategory ===
+                            "all"
+                        ) {
+
+                            item.style.display =
+                                "";
+
+                        } else {
+
+                            const itemCategory =
+                                item.className
+                                    .toLowerCase();
+
+                            item.style.display =
+                                itemCategory.includes(
+                                    "item-" +
+                                    selectedCategory
+                                )
+                                    ? ""
+                                    : "none";
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+        musicControl.addEventListener(
+            "click",
+            toggleMusic
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+            }
+        );
+
+
+        /* =========================================
+           BIRTHDAY NAME
+        ========================================= */
+
+        if (
+            CONFIG.birthdayName !==
+            "[NAME]"
+        ) {
+
+            birthdayName.textContent =
+                `Happy Birthday, ${CONFIG.birthdayName} ♡`;
+
+        }
+
+
+        /* =========================================
+           START
+        ========================================= */
+
+        async function init() {
+
+            console.log(
+                "Birthday website starting..."
+            );
+
+            console.log(
+                "Frames:",
+                CONFIG.totalFrames
+            );
+
+            console.log(
+                "Frame folder:",
+                CONFIG.framePath
+            );
+
+
+            setupCanvas();
+
+
+            /*
+             * Start the animation loop.
+             */
+
+            animate();
+
+
+            /*
+             * Load frames.
+             */
+
+            await loadInitialFrames();
+
+
+            /*
+             * Set initial scroll state.
+             */
+
+            updateScroll();
+
+
+            console.log(
+                "Birthday story ready."
+            );
+
+        }
+
+
+        if (
+            document.readyState ===
+            "loading"
+        ) {
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                init
+            );
+
+        } else {
+
+            init();
+
+        }
+
+        /* =========================================================
+   NAVIGATION WORD MEANINGS
+========================================================= */
+
+const meaningData = {
+    Shafqat: {
+        initial: "S",
+        word: "hafqat",
+        meaning:
+            "compassionate kindness, tenderness, and genuine care for others."
+    },
+
+    Arha: {
+        initial: "A",
+        word: "rha",
+        meaning:
+            "worthy, deserving, and precious in character."
+    },
+
+    Ranaai: {
+        initial: "R",
+        word: "anaai",
+        meaning:
+            "graceful beauty, gentle, or loveliness."
+    },
+
+    Hayfa: {
+        initial: "H",
+        word: "ayfa",
+        meaning:
+            "graceful beauty, charm, and an elegant presence."
+    },
+
+    Anjum: {
+        initial: "A",
+        word: "njum",
+        meaning:
+            "stars; a poetic symbol of light, beauty, and quiet brilliance."
+    }
+};
+
+
+const meaningButtons =
+    document.querySelectorAll(".glass-nav-link");
+
+
+let activeMeaningPopup = null;
+
+
+function createMeaningPopup() {
+
+    if (activeMeaningPopup) {
+        activeMeaningPopup.remove();
+    }
+
+
+    const popup =
+        document.createElement("div");
+
+    popup.className =
+        "word-meaning-popup";
+
+
+    popup.innerHTML = `
+        <h3 class="word-meaning-title">
+            <span class="meaning-initial"></span><span class="meaning-rest"></span>
+        </h3>
+
+        <p class="word-meaning-description"></p>
+
+        <div class="word-meaning-decoration"></div>
+    `;
+
+
+    document.body.appendChild(popup);
+
+    activeMeaningPopup = popup;
+
+    return popup;
+}
+
+
+function positionMeaningPopup(button, popup) {
+
+    const buttonRect =
+        button.getBoundingClientRect();
+
+    const popupWidth =
+        popup.offsetWidth;
+
+    const popupHeight =
+        popup.offsetHeight;
+
+
+    let left =
+        buttonRect.left +
+        (buttonRect.width / 2) -
+        (popupWidth / 2);
+
+
+    let top =
+        buttonRect.bottom + 13;
+
+
+    /*
+       Keep popup inside the screen horizontally.
+    */
+
+    const horizontalMargin = 12;
+
+
+    if (left < horizontalMargin) {
+        left = horizontalMargin;
+    }
+
+
+    if (
+        left + popupWidth >
+        window.innerWidth - horizontalMargin
+    ) {
+        left =
+            window.innerWidth -
+            popupWidth -
+            horizontalMargin;
+    }
+
+
+    /*
+       If there is not enough room underneath,
+       place it above the button.
+    */
+
+    if (
+        top + popupHeight >
+        window.innerHeight - 12
+    ) {
+
+        top =
+            buttonRect.top -
+            popupHeight -
+            13;
+
+        popup.classList.add(
+            "popup-above"
+        );
+
+    } else {
+
+        popup.classList.remove(
+            "popup-above"
+        );
+    }
+
+
+    popup.style.left =
+        `${left}px`;
+
+    popup.style.top =
+        `${top}px`;
+}
+
+
+function showWordMeaning(button) {
+
+    const word =
+        button.textContent.trim();
+
+
+    const data =
+        meaningData[word];
+
+
+    if (!data) {
+        return;
+    }
+
+
+    /*
+       If the same button is clicked again,
+       close its popup.
+    */
+
+    if (
+        activeMeaningPopup &&
+        activeMeaningPopup.dataset.word === word
+    ) {
+
+        closeWordMeaning();
+
+        return;
+    }
+
+
+    const popup =
+        createMeaningPopup();
+
+
+    popup.dataset.word =
+        word;
+
+
+    const initial =
+        popup.querySelector(
+            ".meaning-initial"
+        );
+
+    const rest =
+        popup.querySelector(
+            ".meaning-rest"
+        );
+
+    const description =
+        popup.querySelector(
+            ".word-meaning-description"
+        );
+
+
+    initial.textContent =
+        data.initial;
+
+
+    rest.textContent =
+        data.word;
+
+
+    description.textContent =
+        data.meaning;
+
+
+    /*
+       Make the clicked button active.
+    */
+
+    meaningButtons.forEach(
+        otherButton => {
+
+            otherButton.classList.remove(
+                "active"
+            );
+        }
+    );
+
+
+    button.classList.add(
+        "active"
+    );
+
+
+    /*
+       First make it measurable,
+       then position it.
+    */
+
+    requestAnimationFrame(() => {
+
+        positionMeaningPopup(
+            button,
+            popup
+        );
+
+
+        requestAnimationFrame(() => {
+
+            popup.classList.add(
+                "is-visible"
+            );
+
+        });
+
+    });
+}
+
+
+function closeWordMeaning() {
+
+    if (!activeMeaningPopup) {
+        return;
+    }
+
+
+    activeMeaningPopup.classList.remove(
+        "is-visible"
+    );
+
+
+    const popupToRemove =
+        activeMeaningPopup;
+
+
+    activeMeaningPopup = null;
+
+
+    setTimeout(() => {
+
+        if (
+            popupToRemove &&
+            popupToRemove.parentNode
+        ) {
+
+            popupToRemove.remove();
+
+        }
+
+    }, 320);
+
+
+    meaningButtons.forEach(
+        button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        }
+    );
+}
+
+
+
+
+/* =========================================================
+   BUTTON CLICK EVENTS
+========================================================= */
+
+meaningButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+
+            showWordMeaning(button);
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   CLICK OUTSIDE → CLOSE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            activeMeaningPopup &&
+            !activeMeaningPopup.contains(
+                event.target
+            )
+        ) {
+
+            closeWordMeaning();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   ESCAPE → CLOSE
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            activeMeaningPopup
+        ) {
+
+            closeWordMeaning();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   REPOSITION ON RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (!activeMeaningPopup) {
+            return;
+        }
+
+
+        const currentWord =
+            activeMeaningPopup.dataset.word;
+
+
+        const currentButton =
+            [...meaningButtons].find(
+                button =>
+                    button.textContent.trim() ===
+                    currentWord
+            );
+
+
+        if (currentButton) {
+
+            positionMeaningPopup(
+                currentButton,
+                activeMeaningPopup
+            );
+
+        }
+
+    }
+
+    
+);
+
+
+
+
+        
+
+    </script>
+
+</body>
+</html>

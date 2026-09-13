@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sarha</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .birthday-card {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .birthday-card:hover {
+            transform: scale(1.02);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+                background-color: #fff;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .birthday-card {
+                border-radius: 10px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 2px;
+            }
+            
+            .birthday-card {
+                border-radius: 8px;
+            }
+        }
+
+        /* ===== Secret letter notification ===== */
+        .letter-notification {
+            position: fixed;
+            right: clamp(16px, 3vw, 42px);
+            bottom: clamp(18px, 4vw, 38px);
+            z-index: 20;
+            width: min(330px, calc(100vw - 32px));
+            padding: 0;
+            border: 0;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            animation: letterNotificationIn .8s cubic-bezier(.2,.8,.2,1) both,
+                       letterNotificationFloat 4.5s ease-in-out 1s infinite;
+            filter: drop-shadow(0 16px 28px rgba(83, 57, 67, .18));
+        }
+
+        .letter-notification-inner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px 13px 13px;
+            border: 1px solid rgba(255,255,255,.9);
+            border-radius: 18px;
+            background: rgba(255, 250, 249, .82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            transition: transform .3s ease, background .3s ease, box-shadow .3s ease;
+        }
+
+        .letter-notification:hover .letter-notification-inner,
+        .letter-notification:focus-visible .letter-notification-inner {
+            transform: translateY(-4px);
+            background: rgba(255, 253, 252, .96);
+            box-shadow: 0 18px 35px rgba(83, 57, 67, .12);
+        }
+
+        .letter-icon {
+            position: relative;
+            flex: 0 0 58px;
+            width: 58px;
+            height: 44px;
+            border: 1px solid rgba(154, 113, 130, .35);
+            border-radius: 7px;
+            background: linear-gradient(145deg, #f8e9eb, #dfc4ce);
+            overflow: hidden;
+        }
+
+        .letter-icon::before,
+        .letter-icon::after {
+            content: "";
+            position: absolute;
+            top: 7px;
+            width: 39px;
+            height: 1px;
+            background: rgba(126, 87, 104, .5);
+        }
+
+        .letter-icon::before {
+            left: -5px;
+            transform: rotate(34deg);
+        }
+
+        .letter-icon::after {
+            right: -5px;
+            transform: rotate(-34deg);
+        }
+
+        .letter-flap {
+            position: absolute;
+            inset: 0 0 auto;
+            height: 25px;
+            background: linear-gradient(145deg, #fbeff0, #e8d0d7);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border-bottom: 1px solid rgba(154, 113, 130, .2);
+        }
+
+        .notification-copy {
+            min-width: 0;
+            color: #67535e;
+        }
+
+        .notification-copy small {
+            display: block;
+            margin-bottom: 4px;
+            font: 9px Arial, sans-serif;
+            letter-spacing: .17em;
+            text-transform: uppercase;
+            color: #a18491;
+        }
+
+        .notification-copy strong {
+            display: block;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .notification-copy span {
+            display: block;
+            margin-top: 4px;
+            font: 10px Arial, sans-serif;
+            letter-spacing: .04em;
+            color: #8c7882;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -5px;
+            right: -4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #b8899b;
+            border: 2px solid #fffaf9;
+            animation: notificationPulse 2s ease-in-out infinite;
+        }
+
+        .otp-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            background: rgba(65, 47, 57, .38);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .otp-overlay.is-open {
+            display: flex;
+            animation: overlayFadeIn .3s ease both;
+        }
+
+        .otp-card {
+            width: min(390px, 100%);
+            padding: 30px 26px 26px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,.9);
+            border-radius: 25px;
+            background: rgba(255, 251, 250, .94);
+            box-shadow: 0 28px 80px rgba(52, 36, 45, .25);
+            animation: otpCardIn .45s cubic-bezier(.2,.8,.2,1) both;
+        }
+
+        .otp-envelope {
+            width: 70px;
+            height: 52px;
+            margin: 0 auto 18px;
+            position: relative;
+            border: 1px solid rgba(154, 113, 130, .35);
+            border-radius: 9px;
+            background: linear-gradient(145deg, #f8e9eb, #dfc4ce);
+            overflow: hidden;
+        }
+
+        .otp-envelope::before,
+        .otp-envelope::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            width: 48px;
+            height: 1px;
+            background: rgba(126, 87, 104, .5);
+        }
+
+        .otp-envelope::before {
+            left: -7px;
+            transform: rotate(34deg);
+        }
+
+        .otp-envelope::after {
+            right: -7px;
+            transform: rotate(-34deg);
+        }
+
+        .otp-card h2 {
+            margin: 0;
+            color: #67535e;
+            font-size: 27px;
+            font-weight: 400;
+        }
+
+        .otp-card p {
+            margin: 10px auto 20px;
+            max-width: 290px;
+            color: #8c7882;
+            font-size: 13px;
+            line-height: 1.65;
+            font-style: italic;
+        }
+
+        .otp-input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid rgba(154, 113, 130, .3);
+            border-radius: 12px;
+            outline: none;
+            background: #fff;
+            color: #67535e;
+            text-align: center;
+            font: 700 22px Arial, sans-serif;
+            letter-spacing: .35em;
+            transition: border-color .25s ease, box-shadow .25s ease;
+        }
+
+        .otp-input:focus {
+            border-color: #b8899b;
+            box-shadow: 0 0 0 4px rgba(184, 137, 155, .12);
+        }
+
+        .otp-submit {
+            width: 100%;
+            margin-top: 13px;
+            padding: 13px 18px;
+            border: 0;
+            border-radius: 999px;
+            background: #9d7888;
+            color: white;
+            font: 11px Arial, sans-serif;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            transition: transform .25s ease, background .25s ease;
+        }
+
+        .otp-submit:hover {
+            transform: translateY(-2px);
+            background: #876675;
+        }
+
+        .otp-error {
+            min-height: 18px;
+            margin: 11px 0 0;
+            color: #b35f73;
+            font: 11px Arial, sans-serif;
+        }
+
+        .otp-close {
+            margin-top: 8px;
+            border: 0;
+            background: transparent;
+            color: #9a858e;
+            font: 11px Arial, sans-serif;
+            cursor: pointer;
+        }
+
+        .otp-close:hover {
+            color: #67535e;
+        }
+
+        @keyframes letterNotificationIn {
+            from { opacity: 0; transform: translateY(30px) scale(.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes letterNotificationFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes notificationPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: .65; }
+        }
+
+        @keyframes overlayFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes otpCardIn {
+            from { opacity: 0; transform: translateY(18px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .letter-notification {
+                right: 14px;
+                bottom: 14px;
+                width: calc(100vw - 28px);
+            }
+
+            .letter-notification-inner {
+                padding: 12px;
+            }
+
+            .notification-copy strong {
+                font-size: 15px;
+            }
+
+            .otp-card {
+                padding: 26px 20px 22px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .letter-notification,
+            .notification-dot,
+            .otp-overlay.is-open,
+            .otp-card {
+                animation: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="birthday-card.jpg" alt="Happy Birthday Sarha - Mahinoor 25 Oct" class="birthday-card">
+    </div>
+
+    <!-- Secret letter notification -->
+    <button class="letter-notification" id="letterNotification" type="button"
+            aria-label="Open your private letter">
+        <span class="letter-notification-inner">
+            <span class="letter-icon" aria-hidden="true">
+                <span class="letter-flap"></span>
+            </span>
+            <span class="notification-copy">
+                <small>Notification</small>
+                <strong>You have a private letter ✦</strong>
+                <span>"Sarha.World"</span>
+            </span>
+            <span class="notification-dot" aria-hidden="true"></span>
+        </span>
+    </button>
+
+    <!-- OTP popup -->
+    <div class="otp-overlay" id="otpOverlay" aria-hidden="true">
+        <section class="otp-card" role="dialog" aria-modal="true"
+                 aria-labelledby="otpTitle">
+            <div class="otp-envelope" aria-hidden="true"></div>
+            <h2 id="otpTitle">MAHINOOR</h2>
+            <p>Enter the four-digit code to open the next part of this little world.</p>
+
+            <form id="otpForm" novalidate>
+                <input
+                    id="otpInput"
+                    class="otp-input"
+                    type="password"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="4"
+                    pattern="[0-9]{4}"
+                    placeholder="••••"
+                    aria-label="Enter four digit OTP"
+                    required
+                >
+                <button class="otp-submit" type="submit">Unlock the letter</button>
+                <div class="otp-error" id="otpError" role="alert" aria-live="polite"></div>
+            </form>
+
+            <button class="otp-close" id="otpClose" type="button">Maybe later</button>
+        </section>
+    </div>
+
+
+    <script>
+        (() => {
+            const letterNotification = document.getElementById('letterNotification');
+            const otpOverlay = document.getElementById('otpOverlay');
+            const otpForm = document.getElementById('otpForm');
+            const otpInput = document.getElementById('otpInput');
+            const otpError = document.getElementById('otpError');
+            const otpClose = document.getElementById('otpClose');
+
+            const openOtpPopup = () => {
+                otpOverlay.classList.add('is-open');
+                otpOverlay.setAttribute('aria-hidden', 'false');
+                otpError.textContent = '';
+                otpInput.value = '';
+                window.setTimeout(() => otpInput.focus(), 120);
+            };
+
+            const closeOtpPopup = () => {
+                otpOverlay.classList.remove('is-open');
+                otpOverlay.setAttribute('aria-hidden', 'true');
+                letterNotification.focus();
+            };
+
+            letterNotification.addEventListener('click', openOtpPopup);
+            otpClose.addEventListener('click', closeOtpPopup);
+
+            otpOverlay.addEventListener('click', (event) => {
+                if (event.target === otpOverlay) closeOtpPopup();
+            });
+
+            otpInput.addEventListener('input', () => {
+                otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 4);
+                otpError.textContent = '';
+            });
+
+            otpForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (otpInput.value === '2510') {
+                    otpError.textContent = '';
+                    window.location.href = 'world.html';
+                } else {
+                    otpError.textContent = 'That code is not quite right. Try again.';
+                    otpInput.value = '';
+                    otpInput.focus();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && otpOverlay.classList.contains('is-open')) {
+                    closeOtpPopup();
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>

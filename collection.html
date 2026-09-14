@@ -142,17 +142,43 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;bac
 }
 
 
-/* =========================================================
-   MOVING MEMORIES — CONFIGURABLE FLOATING AUDIO PLAYER
-   Adjust these variables to resize or reposition the frosted block.
-========================================================= */
-.moving-memories-section { position:relative; isolation:isolate; width:100%; max-width:none; padding-left:max(20px,4vw); padding-right:max(20px,4vw); overflow:hidden; --memory-player-width:min(520px,92vw); --memory-player-top:clamp(52px,9vh,115px); --memory-player-x:700px; --memory-player-y:280px; --memory-player-radius:clamp(24px,3vw,36px); --memory-player-padding:clamp(18px,2.4vw,30px); }
+
+.moving-memories-section {
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  max-width:none;
+  padding-left:max(20px,4vw);
+  padding-right:max(20px,4vw);
+  overflow:hidden;
+
+ 
+  --memory-player-width:min(430px,88vw); 
+  --memory-player-top:clamp(185px,24vh,285px); 
+  --memory-player-x:0px; 
+  --memory-player-y:100px; 
+  --memory-player-radius:clamp(24px,3vw,36px); 
+  --memory-player-padding:clamp(18px,2.4vw,30px); 
+}
 .moving-memories-section::before { content:""; position:absolute; inset:0; z-index:-2; background:linear-gradient(90deg,rgba(48,36,45,.42),rgba(48,36,45,.18)),url('./assets/photos/moving-memories-bg.jpg') center/cover no-repeat,linear-gradient(135deg,#d9cbd3,#eee1e3 55%,#cfc5d8); transform:scale(1.02); }
 .moving-memories-section::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg,rgba(250,247,243,.10),rgba(67,49,60,.18)); pointer-events:none; }
 .moving-memories-section .section-head { position:relative; z-index:1; }
 .moving-memories-section .section-label,.moving-memories-section .section-title,.moving-memories-section .section-copy { color:#fffaf7; text-shadow:0 2px 18px rgba(55,39,48,.18); }
 .moving-memories-stage { display:flex; justify-content:center; align-items:flex-start; min-height:clamp(430px,58vh,650px); padding:0 0 clamp(30px,5vw,72px); }
-.moving-memories-player { width:var(--memory-player-width); margin-top:var(--memory-player-top); transform:translate3d(var(--memory-player-x),var(--memory-player-y),0); padding:var(--memory-player-padding); border:1px solid rgba(255,255,255,.58); border-radius:var(--memory-player-radius); background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,247,249,.12)); box-shadow:0 30px 90px rgba(39,27,36,.28),inset 0 1px 0 rgba(255,255,255,.48); backdrop-filter:blur(25px) saturate(125%); -webkit-backdrop-filter:blur(25px) saturate(125%); animation:movingMemoriesFloat 8s ease-in-out infinite; will-change:transform; }
+.moving-memories-player {
+  width:min(var(--memory-player-width),calc(100vw - 32px));
+  margin-top:var(--memory-player-top);
+  transform:translate3d(var(--memory-player-x),var(--memory-player-y),0);
+  padding:var(--memory-player-padding);
+  border:1px solid rgba(255,255,255,.58);
+  border-radius:var(--memory-player-radius);
+  background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,247,249,.12));
+  box-shadow:0 30px 90px rgba(39,27,36,.28),inset 0 1px 0 rgba(255,255,255,.48);
+  backdrop-filter:blur(25px) saturate(125%);
+  -webkit-backdrop-filter:blur(25px) saturate(125%);
+  animation:movingMemoriesFloat 8s ease-in-out infinite;
+  will-change:transform;
+}
 .moving-memories-player-info { min-width:0; text-align:center; color:#fffaf7; }
 .moving-memories-kicker { font:9px Arial,sans-serif; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,250,247,.68); }
 .moving-memories-player-info h3 { margin:12px 0 8px; font:400 clamp(1.75rem,4vw,2.7rem)/1.08 Georgia,'Times New Roman',serif; letter-spacing:-.025em; }
@@ -160,11 +186,97 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;bac
 .moving-memories-audio { display:block; width:100%; height:42px; margin:0 auto; border-radius:999px; accent-color:#b99aaa; filter:drop-shadow(0 8px 18px rgba(35,25,32,.12)); }
 .moving-memories-audio-note { margin-top:13px; font:9px Arial,sans-serif; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,250,247,.58); }
 @keyframes movingMemoriesFloat { 0%,100% { transform:translate3d(var(--memory-player-x),var(--memory-player-y),0); } 50% { transform:translate3d(var(--memory-player-x),calc(var(--memory-player-y) - 8px),0); } }
-@media (max-width:760px) { .moving-memories-section { padding-left:16px; padding-right:16px; --memory-player-width:min(440px,94vw); --memory-player-top:clamp(28px,6vh,60px); --memory-player-padding:18px; } .moving-memories-stage { min-height:0; padding-bottom:34px; } .moving-memories-player { width:var(--memory-player-width); } }
+@media (max-width:760px) {
+  .moving-memories-section {
+    padding-left:16px;
+    padding-right:16px;
+    --memory-player-width:min(360px,88vw);
+    --memory-player-top:clamp(105px,18vh,190px);
+    --memory-player-padding:18px;
+  }
+  .moving-memories-stage { min-height:0; padding-bottom:34px; }
+  .moving-memories-player { width:min(var(--memory-player-width),calc(100vw - 32px)); }
+}
+@media (max-width:390px) {
+  .moving-memories-section { --memory-player-width:calc(100vw - 28px); --memory-player-padding:16px; }
+  .moving-memories-player-info h3 { font-size:clamp(1.55rem,8vw,2rem); }
+  .moving-memories-player-info p { margin-bottom:16px; }
+}
 @media (prefers-reduced-motion:reduce) { .moving-memories-player { animation:none; } }
+
+/* ===== SMOOTH PAGE-LOADING ANIMATION ===== */
+#pageLoader{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#faf7f3 0%,#ead8de 52%,#d9cfdb 100%);
+  opacity:1;
+  visibility:visible;
+  transition:opacity .9s ease, visibility .9s ease;
+}
+#pageLoader.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.page-loader-inner{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+  text-align:center;
+  animation:loaderRise 1.1s ease both;
+}
+.page-loader-mark{
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.88);
+  border-radius:50%;
+  background:rgba(255,253,251,.34);
+  box-shadow:0 14px 40px rgba(74,55,65,.12),inset 0 1px 0 rgba(255,255,255,.75);
+  color:#8d7180;
+  font-size:25px;
+  animation:loaderFloat 2.6s ease-in-out infinite;
+}
+.page-loader-text{
+  color:#75636c;
+  font:10px Arial,sans-serif;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+}
+.page-loader-line{
+  width:120px;
+  height:1px;
+  overflow:hidden;
+  background:rgba(117,99,108,.18);
+}
+.page-loader-line:after{
+  content:"";
+  display:block;
+  width:45%;
+  height:100%;
+  background:#a98b99;
+  animation:loaderLine 1.4s ease-in-out infinite;
+}
+@keyframes loaderRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes loaderFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-7px) rotate(4deg)}}
+@keyframes loaderLine{0%{transform:translateX(-120%)}100%{transform:translateX(290%)}}
+@media(prefers-reduced-motion:reduce){#pageLoader,.page-loader-inner,.page-loader-mark,.page-loader-line:after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+
+<div id="pageLoader" role="status" aria-label="Loading the collection">
+  <div class="page-loader-inner">
+    <div class="page-loader-mark" aria-hidden="true">✦</div>
+    <div class="page-loader-text">A little world is opening</div>
+    <div class="page-loader-line" aria-hidden="true"></div>
+  </div>
+</div>
 <div class="portrait-lock" aria-label="Landscape viewing notice">
   <div class="portrait-lock-card">
     <div class="portrait-lock-icon" aria-hidden="true">↻</div>
@@ -256,23 +368,7 @@ Ho jaye duniya se hum door? "</div>
 <div class="modal" id="modal" aria-hidden="true"><div class="modal-box"><button class="modal-close" id="modalClose" aria-label="Close">×</button><div class="modal-media" id="modalMedia"></div><div class="modal-title"><small id="modalEyebrow"></small><h3 id="modalTitle"></h3><p id="modalDescription"></p></div></div></div>
 
 <script>
-/* ============================================================
-   ASSET MANIFEST
-   Rename your real files to these exact names and place them in:
 
-   assets/
-     artwork/art-01.jpg ... art-06.jpg
-     photos/memory-01.jpg ... memory-12.jpg
-     books/peer-e-kamil.jpg
-           aab-e-hayat.jpg
-           jannat-ke-pattay.jpg
-           amar-bail.jpg
-           ishq-e-atish.jpg
-     audio/song-01.mp3 ... song-03.mp3
-     videos/video-01.mp4 ... video-04.mp4
-
-   You can add/remove entries below without changing the page design.
-   ============================================================ */
 const ASSETS={
   artwork:[
     {file:'art-01.jpg',title:'A little sketch',desc:'A piece from her sketchbook.'},
@@ -324,7 +420,7 @@ function openModal(type,item){
   if(type==='VIDEO'){const v=document.createElement('video');v.src=root+'videos/'+item.file;v.controls=true;v.autoplay=true;v.playsInline=true;media.appendChild(v)}
   else {const i=document.createElement('img');i.src=imgPath(type==='ART'?'artwork':type==='BOOK'?'books':'photos',item.file);i.alt=item.title;i.onerror=()=>{i.replaceWith(placeholder(item.file))};media.appendChild(i)}
 }
-function placeholder(file){const d=document.createElement('div');d.className='placeholder';d.innerHTML='<span>Rename your asset to<br><b>'+file+'</b></span>';return d}
+function placeholder(file){const d=document.createElement('div');d.className='placeholder';d.innerHTML='<span>Loading Asset<br><b>'+file+'</b></span>';return d}
 function buildImageGrid(id,type,data){const grid=document.getElementById(id);data.forEach(item=>{const c=document.createElement('article');c.className='subitem';const img=document.createElement('img');img.src=imgPath(type==='ART'?'artwork':type==='BOOK'?'books':'photos',item.file);img.alt=item.title;img.onerror=()=>{img.replaceWith(placeholder(item.file))};c.append(img);const meta=document.createElement('div');meta.className='submeta';meta.innerHTML='<b>'+item.title+'</b><span>'+item.file+'</span>';c.append(meta);c.onclick=()=>openModal(type,item);grid.append(c)})}
 function buildFinalAudio(){
   const audio=document.getElementById('movingMemoriesAudio');
@@ -337,6 +433,21 @@ document.getElementById('modalClose').onclick=()=>closeModal();modal.onclick=e=>
 
 document.querySelectorAll('.nav button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const target=btn.dataset.target;if(target==='collection')window.scrollTo({top:0,behavior:'smooth'});else document.getElementById(target).scrollIntoView({behavior:'smooth',block:'start'})}));
 const sections=['art','music','memories','books','letter','videos'];const navButtons=[...document.querySelectorAll('.nav button')];const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){const idx=sections.indexOf(entry.target.id);if(idx>=0){navButtons.forEach(b=>b.classList.remove('active'));navButtons[idx+1].classList.add('active')}}})},{rootMargin:'-25% 0px -60% 0px'});sections.forEach(id=>observer.observe(document.getElementById(id)));
+
+
+/* Smoothly reveal the page after the initial document has loaded. */
+(function(){
+  const loader=document.getElementById('pageLoader');
+  if(!loader) return;
+  const hideLoader=()=>{
+    loader.classList.add('is-hidden');
+    window.setTimeout(()=>loader.remove(),1000);
+  };
+  if(document.readyState==='complete') hideLoader();
+  else window.addEventListener('load',hideLoader,{once:true});
+  // Safety fallback so the page never remains covered if an asset is slow.
+  window.setTimeout(hideLoader,5000);
+})();
 </script>
 </body>
 </html>
